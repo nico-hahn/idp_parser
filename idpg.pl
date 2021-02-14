@@ -24,6 +24,7 @@ lit_to --> ['to'].
 determiner --> ['the']; ['a']; ['an']; ['another']; ['some'].
 quantifier --> ['each']; ['every']; ['all'].
 rp --> ['that']; ['which']; ['who'].
+is_are --> lit_is; lit_are.
 
 quant_det --> quantifier.
 quant_det --> determiner.
@@ -79,7 +80,6 @@ vSentence --> argList(vSentence, notempty), lit_can, predicate(vSentence).
 tSentence --> argList(tSentence, notempty), is_are, optional_neg(adjective), predicate(tSentence).
 tSentence --> argList(tSentence, notempty), optional_neg(verb), predicate(tSentence).
 tSentence --> argList(tSentence, notempty), is_are, optional_neg(noun), determiner, predicate(tSentence).
-is_are --> lit_is; lit_are.
 optional_neg(TYPE) --> []; neg(TYPE).
 neg(verb) --> lit_does, lit_not.
 neg(verb) --> lit_do, lit_not.
@@ -104,16 +104,16 @@ validate_preposition(tSentence, P, PREP) :- valid_preposition(P, PREP).
 %----------------------------
 % Structure production
 
+optionalIdList --> idList; [].
 idList --> [IDENTIFIER], moreIdList, {verify_not_reserved(IDENTIFIER)}.
 moreIdList --> [].
 moreIdList --> cc, idList.
 
-sSentence --> [IDENTIFIER], lit_is, determiner, [TYPE_NAME], {verify_not_reserved(IDENTIFIER), verify_not_reserved(TYPE_NAME), type(TYPE_NAME)}.
-sSentence --> idList, lit_are, [TYPE_NAME], {verify_not_reserved(TYPE_NAME), type(TYPE_NAME)}.
-sSentence --> [SEQUENCE_ID_1], lit_to, [SEQUENCE_ID_2], lit_are, [TYPE_NAME],
-  {verify_not_reserved(SEQUENCE_ID_1), verify_not_reserved(SEQUENCE_ID_2), verify_not_reserved(TYPE_NAME), type(TYPE_NAME)}.
-
-sSentence --> idList, [VERB_PREDICATE], idList, {verify_not_reserved(VERB_PREDICATE), valid_predicate(VERB_PREDICATE)}.
-sSentence --> idList, is_are, optional_det, [ADJECTIVE_PREDICATE], preposition, idList, 
-  {verify_not_reserved(ADJECTIVE_PREDICATE), valid_predicate(ADJECTIVE_PREDICATE)}.
-optional_det --> []; determiner.
+sSentence --> sSentenceTyped(noun); sSentenceTyped(verb); sSentenceTyped(adjective).
+sSentenceTyped(TYPE) --> idList, sSentenceSuffix(TYPE).
+sSentenceSuffix(noun) --> lit_is, determiner, [TYPE_NAME], {type(TYPE_NAME)}.
+sSentenceSuffix(noun) --> lit_are, [TYPE_NAME], {type(TYPE_NAME)}.
+sSentenceSuffix(verb) --> [PREDICATE_NAME], optionalIdList, {predicate(PREDICATE_NAME), \+valid_preposition(PREDICATE_NAME, _)}.
+sSentenceSuffix(verb) --> [PREDICATE_NAME], [PREPOSITION], idList, {predicate(PREDICATE_NAME), valid_preposition(PREDICATE_NAME, PREPOSITION)}.
+sSentenceSuffix(adjective) --> is_are, [PREDICATE_NAME], {predicate(PREDICATE_NAME), \+valid_preposition(PREDICATE_NAME, _)}.
+sSentenceSuffix(adjective) --> is_are, [PREDICATE_NAME], [PREPOSITION], idList, {predicate(PREDICATE_NAME), valid_preposition(PREDICATE_NAME, PREPOSITION)}.
