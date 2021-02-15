@@ -1,33 +1,32 @@
+:- [lexicon_checker].
+
 lit_comma --> [','].
 lit_period --> ['.'].
-lit_if --> ['if'].
-lit_then --> ['then'].
+lit_if --> [if].
+lit_then --> [then].
 lit_def_begin --> ['we define the following:'].
 lit_def_end --> ['<def. end>'].
-lit_there --> ['there'].
-lit_are --> ['are'].
-lit_is --> ['is'].
-lit_can --> ['can'].
-lit_be --> ['be'].
-lit_has --> ['has'].
-lit_for --> ['for'].
-lit_does --> ['does'].
-lit_do --> ['do'].
-lit_not --> ['not'].
-lit_the --> ['the'].
-cc --> ['and'].
-cc_or --> ['or'].
-lit_different --> ['different'].
-lit_from --> ['from'].
-lit_of --> ['of'].
-lit_to --> ['to'].
-determiner --> ['the']; ['a']; ['an']; ['another']; ['some'].
-quantifier --> ['each']; ['every']; ['all'].
-rp --> ['that']; ['which']; ['who'].
+lit_there --> [there].
+lit_are --> [are].
+lit_is --> [is].
+lit_can --> [can].
+lit_be --> [be].
+lit_has --> [has].
+lit_for --> [for].
+lit_does --> [does].
+lit_do --> [do].
+lit_not --> [not].
+lit_the --> [the].
+cc --> [and].
+cc_or --> [or].
+lit_different --> [different].
+lit_from --> [from].
+determiner --> [the]; [a]; [an]; [another]; [some].
+quantifier --> [each]; [every]; [all].
+rp --> [that]; [which]; [who].
 is_are --> lit_is; lit_are.
 
-quant_det --> quantifier.
-quant_det --> determiner.
+quant_det --> quantifier ; determiner.
 
 % This predicate is used to ensure that no user-input
 % matches a key word
@@ -61,7 +60,7 @@ sentenceLoop --> superTSentence, lit_period, sentenceLoop.
 %--------------------------------------------------
 
 % type delcarations
-vSentence --> lit_there, lit_are, [TYPE_NAME], {verify_not_reserved(TYPE_NAME), assertz(type(TYPE_NAME))}.
+vSentence --> lit_there, lit_are, [TYPE_NAME], {verify_not_reserved(TYPE_NAME), myAssert(type(TYPE_NAME), noun)}.
 
 % generic arglist rules
 argList(_, empty) --> [].
@@ -73,13 +72,13 @@ moreArgs(X) --> cc, argList(X, notempty).
 moreArgs(_) --> [].
 
 % predicate declarations
-vSentence --> argList(vSentence, notempty), lit_can, lit_be, predicate(vSentence).
-vSentence --> argList(vSentence, notempty), lit_can, predicate(vSentence).
+vSentence --> argList(vSentence, notempty), lit_can, lit_be, predicate(vSentence, adjective).
+vSentence --> argList(vSentence, notempty), lit_can, predicate(vSentence, verb).
 
 % predicates in use
-tSentence --> argList(tSentence, notempty), is_are, optional_neg(adjective), predicate(tSentence).
-tSentence --> argList(tSentence, notempty), optional_neg(verb), predicate(tSentence).
-tSentence --> argList(tSentence, notempty), is_are, optional_neg(noun), determiner, predicate(tSentence).
+tSentence --> argList(tSentence, notempty), is_are, optional_neg(adjective), predicate(tSentence, _).
+tSentence --> argList(tSentence, notempty), optional_neg(verb), predicate(tSentence, _).
+tSentence --> argList(tSentence, notempty), is_are, optional_neg(noun), determiner, predicate(tSentence, _).
 optional_neg(TYPE) --> []; neg(TYPE).
 neg(verb) --> lit_does, lit_not.
 neg(verb) --> lit_do, lit_not.
@@ -91,15 +90,15 @@ superTSentence --> tSentence, log_connective, superTSentence.
 log_connective --> cc; cc_or.
 
 % predicate specifications
-predicate(ST) --> [PREDICATE_NAME], prepositional_phrase(PREDICATE_NAME, ST), argList(ST, empty), {validate_predicate(ST, PREDICATE_NAME)}.
-validate_predicate(vSentence, P) :- assertz(valid_predicate(P)), verify_not_reserved(P).
-validate_predicate(tSentence, P) :- valid_predicate(P), verify_not_reserved(P).
+predicate(ST, WORD_TYPE) --> [PREDICATE_NAME], prepositional_phrase(PREDICATE_NAME, ST, WORD_TYPE), argList(ST, empty), {validate_predicate(ST, PREDICATE_NAME, WORD_TYPE)}.
+validate_predicate(vSentence, P, WORD_TYPE) :- myAssert(valid_predicate(P), WORD_TYPE), verify_not_reserved(P).
+validate_predicate(tSentence, P, _) :- valid_predicate(P), verify_not_reserved(P).
 
-prepositional_phrase(_, vSentence) --> [].
-prepositional_phrase(P, tSentence) --> [], {\+valid_preposition(P, _)}. % if a predicate is mentioned without a preposition, a preposition must not be declared for the predicate.
-prepositional_phrase(P, ST) --> [PREPOSITION], {validate_preposition(ST, P, PREPOSITION)}.
-validate_preposition(vSentence, P, PREP) :- assertz(valid_preposition(P, PREP)).
-validate_preposition(tSentence, P, PREP) :- valid_preposition(P, PREP).
+prepositional_phrase(_, vSentence, _) --> [].
+prepositional_phrase(P, tSentence, _) --> [], {\+valid_preposition(P, _)}. % if a predicate is mentioned without a preposition, a preposition must not be declared for the predicate.
+prepositional_phrase(P, ST, WORD_TYPE) --> [PREPOSITION], {validate_preposition(ST, P, PREPOSITION, WORD_TYPE)}.
+validate_preposition(vSentence, P, PREP, WORD_TYPE) :- myAssert(valid_preposition(P, PREP), WORD_TYPE).
+validate_preposition(tSentence, P, PREP, _) :- valid_preposition(P, PREP).
 
 %----------------------------
 % Structure production
@@ -113,7 +112,31 @@ sSentence --> sSentenceTyped(noun); sSentenceTyped(verb); sSentenceTyped(adjecti
 sSentenceTyped(TYPE) --> idList, sSentenceSuffix(TYPE).
 sSentenceSuffix(noun) --> lit_is, determiner, [TYPE_NAME], {type(TYPE_NAME)}.
 sSentenceSuffix(noun) --> lit_are, [TYPE_NAME], {type(TYPE_NAME)}.
-sSentenceSuffix(verb) --> [PREDICATE_NAME], optionalIdList, {predicate(PREDICATE_NAME), \+valid_preposition(PREDICATE_NAME, _)}.
-sSentenceSuffix(verb) --> [PREDICATE_NAME], [PREPOSITION], idList, {predicate(PREDICATE_NAME), valid_preposition(PREDICATE_NAME, PREPOSITION)}.
-sSentenceSuffix(adjective) --> is_are, [PREDICATE_NAME], {predicate(PREDICATE_NAME), \+valid_preposition(PREDICATE_NAME, _)}.
-sSentenceSuffix(adjective) --> is_are, [PREDICATE_NAME], [PREPOSITION], idList, {predicate(PREDICATE_NAME), valid_preposition(PREDICATE_NAME, PREPOSITION)}.
+sSentenceSuffix(verb) --> [PREDICATE_NAME], optionalIdList, {valid_predicate(PREDICATE_NAME), \+valid_preposition(PREDICATE_NAME, _)}.
+sSentenceSuffix(verb) --> [PREDICATE_NAME], prepositional_phrase(PREDICATE_NAME, sStentence, _).
+sSentenceSuffix(adjective) --> is_are, [PREDICATE_NAME], {valid_predicate(PREDICATE_NAME), \+valid_preposition(PREDICATE_NAME, _)}.
+sSentenceSuffix(adjective) --> is_are, [PREDICATE_NAME], prepositional_phrase(PREDICATE_NAME, sSentence, _).
+prepositional_phrase(PRED, sSentence, _) --> [PREPOSITION], idList, {valid_predicate(PRED), valid_preposition(PRED, PREPOSITION)}.
+
+% ASSERTIONS
+
+myAssert(type(TYPE_PL), noun) :- 
+  noun(TYPE_SG, TYPE_PL),
+  assertz(type(TYPE_SG)),
+  assertz(type(TYPE_PL)).
+
+myAssert(valid_predicate(PRED), adjective) :-
+  assertz(valid_predicate(PRED)).
+
+myAssert(valid_preposition(PRED, PREP), adjective) :-
+  assertz(valid_preposition(PRED, PREP)).
+
+myAssert(valid_predicate(PRED), verb):-
+  verb(PRED_SFORM, PRED),
+  assertz(valid_predicate(PRED_SFORM)),
+  assertz(valid_predicate(PRED)).
+
+myAssert(valid_preposition(PRED, PREP), verb) :-
+  verb(PRED_SFORM, PRED),
+  assertz(valid_preposition(PRED_SFORM, PREP)),
+  assertz(valid_preposition(PRED, PREP)).
