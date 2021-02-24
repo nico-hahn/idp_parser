@@ -16,12 +16,13 @@ noun(S, P) :-
   noun_mass(P, S, _);
   noun_guess(P, S).
 
-noun(SG, PL) :-
+noun(NEW_SG, PL) :-
   atom_concat(NEW_SG, s, PL),
   write(['unknown noun! ', PL, ' guessing: ', NEW_SG]),
   assertz(noun_guess(PL, NEW_SG)).
 
 noun(SG, PL) :-
-  write(['unknown noun!', PL, 'word too hard to guess. sorry. :(']).
+  write(['unknown noun!', PL, 'word too hard to guess. sorry. :(']),
+  fail.
   
   
