@@ -1,13 +1,18 @@
 :- [clex_lexicon].
 :- dynamic noun_guess/2.
+:- dynamic verb_guess/2.
 
 
 % this retrieves the s form or the standard of the given respective other form
 verb(SFORM, NORMALFORM) :-
   iv_finsg(SFORM, NORMALFORM);
-  tv_finsg(SFORM, NORMALFORM).
+  tv_finsg(SFORM, NORMALFORM);
+  verb_guess(SFORM, NORMALFORM).
 
-verb(X, X) :- write('unknown verb!').
+verb(NEW_S, NML) :-
+  atom_concat(NML, s, NEW_S),
+  write(['unknown verb! ', NML, ' guessing: ', NEW_S]),
+  assertz(verb_guess(NEW_S, NML)).
 
 
 % this retrieves the plural or singular form of a noun
