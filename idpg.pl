@@ -12,6 +12,7 @@ lit_is --> [is].
 lit_can --> [can].
 lit_be --> [be].
 lit_has --> [has].
+lit_have --> [have].
 lit_for --> [for].
 lit_does --> [does].
 lit_do --> [do].
@@ -21,6 +22,7 @@ cc --> [and].
 cc_or --> [or].
 lit_different --> [different].
 lit_from --> [from].
+lit_of --> [of].
 determiner --> [the]; [a]; [an]; [another]; [some].
 quantifier --> [each]; [every]; [all].
 rp --> [that]; [which]; [who].
@@ -33,7 +35,7 @@ quant_det --> quantifier ; determiner.
 reserved_words -->
   cc; cc_or; determiner; quantifier;
   rp; lit_comma, lit_period; lit_if; lit_then; lit_def_begin;
-  lit_def_end; lit_there; lit_are; lit_is; lit_can; lit_be; lit_has;
+  lit_def_end; lit_there; lit_are; lit_is; lit_can; lit_be; lit_has; lit_have;
   lit_for; lit_does; lit_do; lit_not; lit_the.
 
 verify_not_reserved(WORD) :- \+ reserved_words([WORD], []). 
@@ -90,7 +92,7 @@ superTSentence --> tSentence, log_connective, superTSentence.
 log_connective --> cc; cc_or.
 
 % predicate specifications
-predicate(ST, WORD_TYPE) --> [PREDICATE_NAME], prepositional_phrase(PREDICATE_NAME, ST, WORD_TYPE), argList(ST, empty), {validate_predicate(ST, PREDICATE_NAME, WORD_TYPE)}.
+predicate(ST, WORD_TYPE) --> [PREDICATE_NAME], prepositional_phrase(PREDICATE_NAME, ST, WORD_TYPE), argList(ST, empty), {verify_not_reserved(PREDICATE_NAME), validate_predicate(ST, PREDICATE_NAME, WORD_TYPE)}.
 validate_predicate(vSentence, P, WORD_TYPE) :- myAssert(valid_predicate(P), WORD_TYPE), verify_not_reserved(P).
 validate_predicate(tSentence, P, _) :- valid_predicate(P), verify_not_reserved(P).
 
@@ -118,7 +120,25 @@ sSentenceSuffix(adjective) --> is_are, [PREDICATE_NAME], {valid_predicate(PREDIC
 sSentenceSuffix(adjective) --> is_are, [PREDICATE_NAME], prepositional_phrase(PREDICATE_NAME, sSentence, _).
 prepositional_phrase(PRED, sSentence, _) --> [PREPOSITION], idList, {valid_predicate(PRED), valid_preposition(PRED, PREPOSITION)}.
 
+%-----------------------------
+% Functions
+
+vSentence --> argList(vSentence), lit_can, lit_have, determiner, [FUNCTION_NAME], functionTypePhrase, {verify_not_reserved(FUNCTION_NAME), myAssert(FUNCTION_NAME)}.
+functionTypePhrase --> [].
+functionTypePhrase --> rp, lit_is, determiner, [TYPE_NAME], {type(TYPE_NAME)}.
+
+tSentence --> [IDENTIFIER], functionOperatorPhrase, determiner, [FUNCTION_NAME], lit_of, argList(tSentence), {verify_not_reserved(IDENTIFIER), function(FUNCTION_NAME)}.
+functionOperatorPhrase --> lit_is.
+functionOperatorPhrase --> lit_is, lit_not.
+functionOperatorPhrase --> lit_is, lit_different, lit_from.
+
+sSentence --> determiner, [FUNCTION_NAME], lit_of, argList(tSentence), lit_is, [FUNCTION_VAL], {verify_not_reserved(FUNCTION_NAME), verify_not_reserved(FUNCTION_VAL)}.
+
+%-----------------------------
 % ASSERTIONS
+
+myAssert(function(F_NAME), _) :-
+  assertz(function(F_NAME)).
 
 myAssert(type(TYPE_PL), noun) :- 
   noun(TYPE_SG, TYPE_PL),

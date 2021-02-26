@@ -14,6 +14,7 @@ verb(NEW_S, NML) :-
   write(['unknown verb! ', NML, ' guessing: ', NEW_S]),
   assertz(verb_guess(NEW_S, NML)).
 
+% TODO: Add another rule to guess ..y to ..ies
 
 % this retrieves the plural or singular form of a noun
 noun(S, P) :- 
