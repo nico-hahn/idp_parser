@@ -1,5 +1,7 @@
 :- use_module(library(lists)).
 
+% Takes a list [a, b, c, ...] and a functor func
+% and returns a list [func(a), func(b), func(c), ...] 
 encapsuleListInFunctor([], _, []).
 encapsuleListInFunctor(InputList, Functor, OutputList) :-
   InputList = [In|InRest],
