@@ -32,19 +32,24 @@ quantified_implication(DrsIn, DrsOut) -->
   implication(DrsNext, DrsOut).
 
 % IMPLICATIONS
-% TODO: This Drs threading implementation is currently wrong.
 implication(DrsIn, DrsOut) -->
   lit_if,
-  superTSentence(DrsIn, DrsNext),
+  superTSentence(drs([],[]), DrsAntecedent),
   lit_comma,
   lit_then,
-  superTSentence(DrsNext, DrsOut).
+  superTSentence(drs([],[]), DrsConsequent),
+  {
+    buildDrsImplication(DrsIn, DrsAntecedent, DrsConsequent, DrsOut)
+  }.
 
 implication(DrsIn, DrsOut) -->
-  superTSentence(DrsIn, DrsNext),
+  superTSentence(drs([],[]), DrsConsequent),
   lit_comma,
   lit_if,
-  superTSentence(DrsNext, DrsOut).
+  superTSentence(drs([],[]), DrsAntecedent),
+  {
+    buildDrsImplication(DrsIn, DrsAntecedent, DrsConsequent, DrsOut)
+  }.
 
 % DEFINITIONS
 definition(DrsIn, DrsOut) -->
