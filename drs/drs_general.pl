@@ -1,7 +1,9 @@
 % generic arglist rules
-argList(_, empty, _, _) --> [].
+argList(_, empty, _) --> [].
 
-argList(vSentence, _, _, _) -->
+argList(_, _, []) --> [].
+
+argList(vSentence, _, _) -->
   determiner,
   [TYPE_NAME],
   moreArgs(vSentence, _, _),
@@ -9,20 +11,18 @@ argList(vSentence, _, _, _) -->
     type(TYPE_NAME)
   }.
 
-argList(tSentence, _, RefsIn, RefsOut) -->
+argList(tSentence, _, [IDENTIFIER|RefsOut]) -->
   optional_det_phrase,
   [IDENTIFIER],
-  moreArgs(tSentence, [IDENTIFIER|RefsIn], RefsOut),
+  moreArgs(tSentence, RefsOut),
   {
-    verify_not_reserved(IDENTIFIER),
-    RefsOut = [IDENTIFIER|RefsIn]
-    % TODO: Make sure that all members of RefsOut are distinct.
+    verify_not_reserved(IDENTIFIER)
+    % TODO: Make sure that all members of RefsNext are distinct.
   }.
 
-moreArgs(_, _, _) --> [].
-moreArgs(X, RefsIn, RefsOut) -->
+moreArgs(X, RefsOut) -->
   cc,
-  argList(X, notempty, RefsIn, RefsOut).
+  argList(X, notempty, RefsOut).
 
 optional_det_phrase --> [].
 optional_det_phrase -->

@@ -1,7 +1,7 @@
 % TODO: Put common extra goals into a predicate
 
 tSentence(DrsIn, DrsOutNeg) -->
-  argList(tSentence, notempty, [], ReferentList),
+  argList(tSentence, notempty, ReferentList),
   is_are,
   neg(adjective),
   predicate(tSentence, _, DrsNext, DrsOut),
@@ -14,7 +14,7 @@ tSentence(DrsIn, DrsOutNeg) -->
   }.
 
 tSentence(DrsIn, DrsOut) -->
-  argList(tSentence, notempty, [], ReferentList),
+  argList(tSentence, notempty, ReferentList),
   is_are,
   predicate(tSentence, _, DrsNext, DrsOut),
   {
@@ -24,19 +24,19 @@ tSentence(DrsIn, DrsOut) -->
   }.
 
 tSentence(DrsIn, DrsOutNeg) -->
-  argList(tSentence, notempty, [], ReferentList),
+  argList(tSentence, notempty, ReferentList),
   neg(verb),
   predicate(tSentence, _, DrsNext, DrsOut),
   {
     DrsIn = drs(RefsIn, CondsIn),
-    DrsNext = drs(RefsOut, CondsIn)
+    DrsNext = drs(RefsOut, CondsIn),
     append(ReferentList, RefsIn, RefsOut),
     DrsOut = drs(RefsOutNeg, [CondNeg|CondsOutRest]),
     DrsOutNeg = drs(RefsOutNeg, [drsNeg(drs([], [CondNeg]))|CondsOutRest])
   }.
 
 tSentence(DrsIn, DrsOutNeg) -->
-  argList(tSentence, notempty, [], ReferentList),
+  argList(tSentence, notempty, ReferentList),
   is_are,
   neg(noun),
   determiner,
@@ -61,7 +61,7 @@ superTSentence(DrsIn, DrsOut) -->
   {
     DrsIn = drs(RefsIn, CondsIn),
     append(ReferentList, RefsIn, RefsNext),
-    DrsNext(RefsNext, CondsIn)
+    DrsNext = drs(RefsNext, CondsIn)
   }.
 
 superTSentence -->
@@ -75,7 +75,7 @@ log_connective --> cc; cc_or.
 predicate(ST, WORD_TYPE, DrsIn, DrsOut) -->
   [PREDICATE_NAME],
   prepositional_phrase(PREDICATE_NAME, ST, WORD_TYPE),
-  argList(ST, empty, [], NewRefs),
+  argList(ST, empty, NewRefs),
   {
     verify_not_reserved(PREDICATE_NAME),
     validate_predicate(ST, PREDICATE_NAME, WORD_TYPE),
@@ -83,7 +83,7 @@ predicate(ST, WORD_TYPE, DrsIn, DrsOut) -->
     % Order of RefsIn and NewRefs is semantically important (e.g. parents(x, y, z), where z is the child)
     append(RefsIn, NewRefs, RefsOut),
     buildDrsPredicate(PREDICATE_NAME, RefsOut, Condition),
-    DrsOut = drs(RefsOut, [Condition|_])
+    DrsOut = drs(RefsOut, [Condition|CondsIn])
   }.
 
 validate_predicate(vSentence, P, WORD_TYPE) :-

@@ -9,18 +9,19 @@
 
 % a sentence can be: a super-theory-sentence, a vocabulary-sentence, a structure-sentence, or a definition.
 % every sentence ends with a '.'
-sentence(DrsIn, DrsOut) -->
-  sentenceComponent(DrsIn, DrsOut),
+sentence -->
+  sentenceComponent(DrsOut),
   lit_period,
   { write(DrsOut) }.
 
-sentenceComponent(DrsIn, DrsOut) -->
-  vSentence(DrsIn, DrsOut);
-  superTSentence(DrsIn, DrsOut);
-  implication(DrsIn, DrsOut);
-  sSentence(DrsIn, DrsOut);
-  definition(DrsIn, DrsOut);
-  quantified_implication(DrsIn, DrsOut).
+sentenceComponent(_) --> vSentence. % Vocabulary sentences don't produce DRS
+
+sentenceComponent(DrsOut) -->
+  superTSentence(drs([], []), DrsOut);
+  implication(drs([], []), DrsOut);
+  sSentence(drs([], []), DrsOut);
+  definition(drs([], []), DrsOut);
+  quantified_implication(drs([], []), DrsOut).
 
 superTSentence(DrsIn, DrsOut) -->
   tSentence(DrsIn, DrsOut).

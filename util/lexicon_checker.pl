@@ -27,7 +27,7 @@ noun(NEW_SG, PL) :-
   write(['unknown noun! ', PL, ' guessing: ', NEW_SG]),
   assertz(noun_guess(PL, NEW_SG)).
 
-noun(SG, PL) :-
+noun(_, PL) :-
   write(['unknown noun! ', PL, ' word too hard to guess. sorry. :(']),
   fail.
   

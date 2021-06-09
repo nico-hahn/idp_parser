@@ -5,13 +5,14 @@
 encapsuleListInFunctor([], _, []).
 encapsuleListInFunctor(InputList, Functor, OutputList) :-
   InputList = [In|InRest],
-  OutputList = [call(Functor, In)|OutRest],
+  Term =.. [Functor, In],
+  OutputList = [Term|OutRest],
   encapsuleListInFunctor(InRest, Functor, OutRest).
 
 % Takes a list [a, b, c, ...] and a predicate name 'pred'
 % puts it into a predicate pred(a, b, c, ...)
 buildDrsPredicate(PName, Args, Predicate) :-
-  Predicate = apply(PName, Args)
+  Predicate = apply(PName, Args).
   
 % Takes a main drs, an antecedent drc and a consequence drs
 % and builds that into the main drs
