@@ -16,7 +16,7 @@ test(argList) :-
     optional_det_phrase([a, tree], [])
   ),
   assertion(
-    argList(vSentence, _, _, [a, tree, and, a, flower], [])
+    argList(vSentence, notempty, _, [a, tree, and, a, flower], [])
   ),
   assertion(
     argList(tSentence, notempty, [id1, id2], [a, tree, id1, and, a, flower, id2], [])
