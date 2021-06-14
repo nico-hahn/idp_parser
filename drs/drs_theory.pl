@@ -72,13 +72,13 @@ superTSentence -->
 log_connective --> cc; cc_or.
 
 % predicates
-predicate(ST, WORD_TYPE, DrsIn, DrsOut) -->
+predicate(SentenceType, WordType, DrsIn, DrsOut) -->
   [PREDICATE_NAME],
-  prepositional_phrase(PREDICATE_NAME, ST, WORD_TYPE),
-  argList(ST, empty, NewRefs),
+  prepositional_phrase(PREDICATE_NAME, SentenceType, WordType),
+  argList(SentenceType, empty, NewRefs),
   {
     verify_not_reserved(PREDICATE_NAME),
-    validate_predicate(ST, PREDICATE_NAME, WORD_TYPE),
+    validate_predicate(SentenceType, PREDICATE_NAME, WordType),
     DrsIn = drs(RefsIn, CondsIn),
     % Order of RefsIn and NewRefs is semantically important (e.g. parents(x, y, z), where z is the child)
     append(RefsIn, NewRefs, RefsOut),
@@ -86,8 +86,8 @@ predicate(ST, WORD_TYPE, DrsIn, DrsOut) -->
     DrsOut = drs(RefsOut, [Condition|CondsIn])
   }.
 
-validate_predicate(vSentence, P, WORD_TYPE) :-
-  myAssert(valid_predicate(P), WORD_TYPE), 
+validate_predicate(vSentence, P, WordType) :-
+  myAssert(valid_predicate(P), WordType), 
   verify_not_reserved(P).
 
 validate_predicate(tSentence, P, _) :-
@@ -102,14 +102,14 @@ prepositional_phrase(P, tSentence, _) -->
     \+valid_preposition(P, _)
   }.
 
-prepositional_phrase(P, ST, WORD_TYPE) -->
+prepositional_phrase(P, SentenceType, WordType) -->
   [PREPOSITION],
   {
-    validate_preposition(ST, P, PREPOSITION, WORD_TYPE)
+    validate_preposition(SentenceType, P, PREPOSITION, WordType)
   }.
 
-validate_preposition(vSentence, P, PREP, WORD_TYPE) :-
-  myAssert(valid_preposition(P, PREP), WORD_TYPE).
+validate_preposition(vSentence, P, PREP, WordType) :-
+  myAssert(valid_preposition(P, PREP), WordType).
 
 validate_preposition(tSentence, P, PREP, _) :-
   valid_preposition(P, PREP).

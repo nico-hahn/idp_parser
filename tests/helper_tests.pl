@@ -5,4 +5,7 @@ test(encapsuleListInFunctor) :-
 test(encapsuleListInFunctor_Fail, [fail]) :-
   encapsuleListInFunctor([a, b, c], func, [a, fun(b), fun(c)]).
 
+test(buildDrsPredicate) :-
+  buildDrsPredicate(pred, [b, c], pred(b, c)).
+
 :- end_tests(helperTests).

@@ -5,6 +5,9 @@
 test(types) :-
   assertion(sentence([there, are, trees, '.'], [])),
   assertion(sentence([there, are, flowers, '.'], [])),
+  assertion(sentence([there, are, areas, '.'], [])),
+  assertion(sentence([there, are, dogs, '.'], [])),
+  assertion(sentence([there, are, persons, '.'], [])),
   assertion(noun(tree, trees)),
   assertion(noun(flower, flowers)).
 
@@ -27,5 +30,27 @@ test(argList) :-
   assertion(
     argList(tSentence, notempty, [id1, id2], [a, tree, id1, and, id2], [])
   ).
-  
+
+test(predicateDefinitions) :-
+  assertion(
+    sentenceComponent(_, [an, area, can, border, an, area], [])
+  ),
+  assertion(
+    sentenceComponent(_, [a, tree, and, a, tree, can, be, friends], [])
+  ),
+  assertion(
+    sentenceComponent(_, [a, tree, can, be, married, to, a, flower], [])
+  ),
+  assertion(
+    sentenceComponent(_, [a, flower, can, fly], [])  
+  ).
+
+test(functionDefinitions) :-
+  assertion(
+    sentenceComponent(_, [an, area, can, have, a, color], [])
+  ),
+  assertion(
+    sentenceComponent(_, [a, dog, can, have, an, owner, that, is, a, person], [])
+  ).
+
 :- end_tests(grammarTests).

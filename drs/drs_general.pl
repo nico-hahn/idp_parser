@@ -1,10 +1,10 @@
 % generic arglist rules
-argList(_, empty, _) --> [].
+argList(_, empty, []) --> [].
 
-argList(vSentence, _, _) -->
+argList(vSentence, _, []) -->
   determiner,
   [TypeName],
-  moreArgs(vSentence, _),
+  moreArgs(vSentence, []),
   {
     type(TypeName)
   }.
