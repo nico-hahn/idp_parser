@@ -19,16 +19,16 @@ test(argList) :-
     optional_det_phrase([a, tree], [])
   ),
   assertion(
-    argList(vSentence, notempty, _, [a, tree, and, a, flower], [])
+    argList(vSentence, notempty, [flower, tree], [a, tree, and, a, flower], [])
   ),
   assertion(
-    argList(tSentence, notempty, [id1, id2], [a, tree, id1, and, a, flower, id2], [])
+    argList(tSentence, notempty, [id2, id1], [a, tree, id1, and, a, flower, id2], [])
   ),
   assertion(
-    argList(tSentence, notempty, [id1, id2], [id1, and, id2], [])
+    argList(tSentence, notempty, [id2, id1], [id1, and, id2], [])
   ),
   assertion(
-    argList(tSentence, notempty, [id1, id2], [a, tree, id1, and, id2], [])
+    argList(tSentence, notempty, [id2, id1], [a, tree, id1, and, id2], [])
   ).
 
 test(predicateDefinitions) :-

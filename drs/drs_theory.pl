@@ -115,7 +115,17 @@ validate_preposition(tSentence, P, PREP, _) :-
   valid_preposition(P, PREP).
 
 % functions
-tSentence --> [IDENTIFIER], functionOperatorPhrase, determiner, [FUNCTION_NAME], lit_of, argList(tSentence), {verify_not_reserved(IDENTIFIER), function(FUNCTION_NAME)}.
+tSentence -->
+  [IDENTIFIER],
+  functionOperatorPhrase,
+  determiner,
+  [FUNCTION_NAME],
+  lit_of,
+  argList(tSentence),
+  {
+    verify_not_reserved(IDENTIFIER),
+    function(FUNCTION_NAME)
+  }.
 functionOperatorPhrase --> lit_is.
 functionOperatorPhrase --> lit_is, lit_not.
 functionOperatorPhrase --> lit_is, lit_different, lit_from.
