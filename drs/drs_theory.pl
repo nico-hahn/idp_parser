@@ -1,50 +1,63 @@
 % TODO: Put common extra goals into a predicate
 
 tSentence(DrsIn, DrsOutNeg) -->
-  argList(tSentence, notempty, ReferentList),
+  argList(tSentence, notempty, RefList1),
   is_are,
   neg(adjective),
   predicate(tSentence, _, DrsNext, DrsOut),
+  arglist(tSentence, empty, RefList2)
   {
     DrsIn = drs(RefsIn, CondsIn),
     DrsNext = drs(RefsNext, CondsIn),
-    append(ReferentList, RefsIn, RefsNext),
+    % Order of RefsIn and NewRefs is semantically important (e.g. parents(x, y, z), where z is the child)
+    append(RefList2, RefsIn, RefsN),
+    append(RefList1, RefsN, RefsNext),
     DrsOut = drs(RefsOutNeg, [CondNeg|CondsOutRest]),
     DrsOutNeg = drs(RefsOutNeg, [drsNeg(drs([], [CondNeg]))|CondsOutRest])
   }.
 
 tSentence(DrsIn, DrsOut) -->
-  argList(tSentence, notempty, ReferentList),
+  argList(tSentence, notempty, RefList1),
   is_are,
   predicate(tSentence, _, DrsNext, DrsOut),
+  argList(tSentence, empty, RefList2)
   {
     DrsIn = drs(RefsIn, CondsIn),
     DrsNext = drs(RefsOut, CondsIn),
-    append(ReferentList, RefsIn, RefsOut)
+    % Order of RefsIn and NewRefs is semantically important (e.g. parents(x, y, z), where z is the child)
+    append(RefList2, RefsIn, RefsN),
+    append(RefList1, RefsN, RefsOut)
+    
   }.
 
 tSentence(DrsIn, DrsOutNeg) -->
-  argList(tSentence, notempty, ReferentList),
+  argList(tSentence, notempty, RefList1),
   neg(verb),
   predicate(tSentence, _, DrsNext, DrsOut),
+  argList(tSentence, empty, RefList2)
   {
     DrsIn = drs(RefsIn, CondsIn),
     DrsNext = drs(RefsOut, CondsIn),
-    append(ReferentList, RefsIn, RefsOut),
+    % Order of RefsIn and NewRefs is semantically important (e.g. parents(x, y, z), where z is the child)
+    append(RefList2, RefsIn, RefsN),
+    append(RefList1, RefsN, RefsOut),
     DrsOut = drs(RefsOutNeg, [CondNeg|CondsOutRest]),
     DrsOutNeg = drs(RefsOutNeg, [drsNeg(drs([], [CondNeg]))|CondsOutRest])
   }.
 
 tSentence(DrsIn, DrsOutNeg) -->
-  argList(tSentence, notempty, ReferentList),
+  argList(tSentence, notempty, RefList1),
   is_are,
   neg(noun),
   determiner,
   predicate(tSentence, _, DrsNext, DrsOut),
+  argList(tSentence, empty, RefList2)
   {
     DrsIn = drs(RefsIn, CondsIn),
     DrsNext = drs(RefsOut, CondsIn),
-    append(ReferentList, RefsIn, RefsOut),
+    % Order of RefsIn and NewRefs is semantically important (e.g. parents(x, y, z), where z is the child)
+    append(RefList2, RefsIn, RefsN),
+    append(RefList1, RefsN, RefsOut),
     DrsOut = drs(RefsOutNeg, [CondNeg|CondsOutRest]),
     DrsOutNeg = drs(RefsOutNeg, [drsNeg(drs([], [CondNeg]))|CondsOutRest])
   }.
@@ -75,15 +88,12 @@ log_connective --> cc; cc_or.
 predicate(SentenceType, WordType, DrsIn, DrsOut) -->
   [PREDICATE_NAME],
   prepositional_phrase(PREDICATE_NAME, SentenceType, WordType),
-  argList(SentenceType, empty, NewRefs),
   {
     verify_not_reserved(PREDICATE_NAME),
     validate_predicate(SentenceType, PREDICATE_NAME, WordType),
     DrsIn = drs(RefsIn, CondsIn),
-    % Order of RefsIn and NewRefs is semantically important (e.g. parents(x, y, z), where z is the child)
-    append(RefsIn, NewRefs, RefsOut),
-    buildDrsPredicate(PREDICATE_NAME, RefsOut, Condition),
-    DrsOut = drs(RefsOut, [Condition|CondsIn])
+    buildDrsPredicate(PREDICATE_NAME, RefsIn, Condition),
+    DrsOut = drs(RefsIn, [Condition|CondsIn])
   }.
 
 validate_predicate(vSentence, P, WordType) :-

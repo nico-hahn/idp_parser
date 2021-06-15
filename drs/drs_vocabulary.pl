@@ -13,12 +13,14 @@ vSentence -->
   argList(vSentence, notempty, _),
   lit_can,
   lit_be,
-  predicate(vSentence, adjective, drs([], []), _).
+  predicate(vSentence, adjective, drs([], []), _),
+  argList(vSentence, empty, _).
 
 vSentence -->
   argList(vSentence, notempty, _),
   lit_can,
-  predicate(vSentence, verb, drs([], []), _).
+  predicate(vSentence, verb, drs([], []), _),
+  argList(vSentence, empty, _).
 
 % function declaration
 vSentence -->
