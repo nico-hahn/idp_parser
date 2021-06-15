@@ -4,14 +4,15 @@ tSentence(DrsIn, DrsOutNeg) -->
   argList(tSentence, notempty, RefList1),
   is_are,
   neg(adjective),
-  predicate(tSentence, _, DrsNext, DrsOut),
-  arglist(tSentence, empty, RefList2)
+  predicate(tSentence, _, Arity, DrsNext, DrsOut),
+  arglist(tSentence, empty, RefList2),
   {
     DrsIn = drs(RefsIn, CondsIn),
     DrsNext = drs(RefsNext, CondsIn),
     % Order of RefsIn and NewRefs is semantically important (e.g. parents(x, y, z), where z is the child)
-    append(RefList2, RefsIn, RefsN),
-    append(RefList1, RefsN, RefsNext),
+    append(RefList1, RefList2, ReferentList),
+    append(ReferentList, RefsIn, RefsNext),
+    length(ReferentList, Arity),
     DrsOut = drs(RefsOutNeg, [CondNeg|CondsOutRest]),
     DrsOutNeg = drs(RefsOutNeg, [drsNeg(drs([], [CondNeg]))|CondsOutRest])
   }.
@@ -19,28 +20,29 @@ tSentence(DrsIn, DrsOutNeg) -->
 tSentence(DrsIn, DrsOut) -->
   argList(tSentence, notempty, RefList1),
   is_are,
-  predicate(tSentence, _, DrsNext, DrsOut),
-  argList(tSentence, empty, RefList2)
+  predicate(tSentence, _, Arity, DrsNext, DrsOut),
+  argList(tSentence, empty, RefList2),
   {
     DrsIn = drs(RefsIn, CondsIn),
     DrsNext = drs(RefsOut, CondsIn),
     % Order of RefsIn and NewRefs is semantically important (e.g. parents(x, y, z), where z is the child)
-    append(RefList2, RefsIn, RefsN),
-    append(RefList1, RefsN, RefsOut)
-    
+    append(RefList1, RefList2, ReferentList),
+    append(ReferentList, RefsIn, RefsOut),
+    length(ReferentList, Arity)
   }.
 
 tSentence(DrsIn, DrsOutNeg) -->
   argList(tSentence, notempty, RefList1),
   neg(verb),
-  predicate(tSentence, _, DrsNext, DrsOut),
-  argList(tSentence, empty, RefList2)
+  predicate(tSentence, _, Arity, DrsNext, DrsOut),
+  argList(tSentence, empty, RefList2),
   {
     DrsIn = drs(RefsIn, CondsIn),
     DrsNext = drs(RefsOut, CondsIn),
     % Order of RefsIn and NewRefs is semantically important (e.g. parents(x, y, z), where z is the child)
-    append(RefList2, RefsIn, RefsN),
-    append(RefList1, RefsN, RefsOut),
+    append(RefList1, RefList2, ReferentList),
+    append(ReferentList, RefsIn, RefsOut),
+    length(ReferentList, Arity),
     DrsOut = drs(RefsOutNeg, [CondNeg|CondsOutRest]),
     DrsOutNeg = drs(RefsOutNeg, [drsNeg(drs([], [CondNeg]))|CondsOutRest])
   }.
@@ -50,14 +52,15 @@ tSentence(DrsIn, DrsOutNeg) -->
   is_are,
   neg(noun),
   determiner,
-  predicate(tSentence, _, DrsNext, DrsOut),
-  argList(tSentence, empty, RefList2)
+  predicate(tSentence, _, Arity, DrsNext, DrsOut),
+  argList(tSentence, empty, RefList2),
   {
     DrsIn = drs(RefsIn, CondsIn),
     DrsNext = drs(RefsOut, CondsIn),
     % Order of RefsIn and NewRefs is semantically important (e.g. parents(x, y, z), where z is the child)
-    append(RefList2, RefsIn, RefsN),
-    append(RefList1, RefsN, RefsOut),
+    append(RefList1, RefList2, ReferentList),
+    append(ReferentList, RefsIn, RefsOut),
+    length(ReferentList, Arity),
     DrsOut = drs(RefsOutNeg, [CondNeg|CondsOutRest]),
     DrsOutNeg = drs(RefsOutNeg, [drsNeg(drs([], [CondNeg]))|CondsOutRest])
   }.
@@ -85,23 +88,23 @@ superTSentence -->
 log_connective --> cc; cc_or.
 
 % predicates
-predicate(SentenceType, WordType, DrsIn, DrsOut) -->
+predicate(SentenceType, WordType, Arity, DrsIn, DrsOut) -->
   [PREDICATE_NAME],
   prepositional_phrase(PREDICATE_NAME, SentenceType, WordType),
   {
     verify_not_reserved(PREDICATE_NAME),
-    validate_predicate(SentenceType, PREDICATE_NAME, WordType),
+    validate_predicate(SentenceType, PREDICATE_NAME, Arity, WordType),
     DrsIn = drs(RefsIn, CondsIn),
     buildDrsPredicate(PREDICATE_NAME, RefsIn, Condition),
     DrsOut = drs(RefsIn, [Condition|CondsIn])
   }.
 
-validate_predicate(vSentence, P, WordType) :-
-  myAssert(valid_predicate(P), WordType), 
+validate_predicate(vSentence, P, Arity, WordType) :-
+  myAssert(valid_predicate(P, Arity), WordType), 
   verify_not_reserved(P).
 
-validate_predicate(tSentence, P, _) :-
-  valid_predicate(P),
+validate_predicate(tSentence, P, Arity, _) :-
+  valid_predicate(P, Arity),
   verify_not_reserved(P).
 
 prepositional_phrase(_, vSentence, _) --> [].
