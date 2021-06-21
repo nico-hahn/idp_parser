@@ -13,22 +13,12 @@ vSentence -->
   argList(vSentence, notempty, RefList1),
   lit_can,
   lit_be,
-  predicate(vSentence, adjective, Arity, drs([], []), _),
-  argList(vSentence, empty, RefList2),
-  {
-    append(RefList1, RefList2, Referents),
-    length(Referents, Arity)
-  }.
+  predicate(vSentence, adjective, RefList1, drs([], []), _).
 
 vSentence -->
   argList(vSentence, notempty, RefList1),
   lit_can,
-  predicate(vSentence, verb, Arity, drs([], []), _),
-  argList(vSentence, empty, RefList2),
-  {
-    append(RefList1, RefList2, Referents),
-    length(Referents, Arity)
-  }.
+  predicate(vSentence, verb, RefList1, drs([], []), _).
 
 % function declaration
 vSentence -->
