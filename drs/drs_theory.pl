@@ -92,6 +92,7 @@ prepositional_phrase(P, tSentence, _) -->
 prepositional_phrase(P, SentenceType, WordType) -->
   [PREPOSITION],
   {
+    verify_not_reserved(P),
     validate_preposition(SentenceType, P, PREPOSITION, WordType)
   }.
 

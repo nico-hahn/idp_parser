@@ -82,17 +82,34 @@ myAssert(type(TYPE_PL), noun) :-
   assertz(type(TYPE_PL)).
 
 myAssert(valid_predicate(PRED, Arity), adjective) :-
-  assertz(valid_predicate(PRED, Arity)).
+  assert_predicate(PRED, Arity).
 
 myAssert(valid_preposition(PRED, PREP), adjective) :-
   assertz(valid_preposition(PRED, PREP)).
 
 myAssert(valid_predicate(PRED, Arity), verb):-
   verb(PRED_SFORM, PRED),
-  assertz(valid_predicate(PRED_SFORM, Arity)),
-  assertz(valid_predicate(PRED, Arity)).
+  assert_predicate(PRED_SFORM, Arity),
+  assert_predicate(PRED, Arity).
 
 myAssert(valid_preposition(PRED, PREP), verb) :-
   verb(PRED_SFORM, PRED),
   assertz(valid_preposition(PRED_SFORM, PREP)),
   assertz(valid_preposition(PRED, PREP)).
+
+% If predicate exists and new arity is larger, then replace
+assert_predicate(Predicate, Arity) :-
+  valid_predicate(Predicate, X),
+  number(X),
+  Arity > X,
+  retract(valid_predicate(Predicate, X)),
+  assertz(valid_predicate(Predicate, Arity)).
+
+% If predicate exists and new arity is smaller, do nothing
+assert_predicate(Predicate, Arity) :-
+  valid_predicate(Predicate, X),
+  number(X).
+
+% If nothing of the above, assert the predicate
+assert_predicate(Predicate, Arity) :-
+  assertz(valid_predicate(Predicate, Arity)).
