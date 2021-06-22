@@ -39,50 +39,97 @@ sSentenceSuffix(noun, DrsIn, ReferentList, DrsOut) -->
   }.
 sSentenceConnector(noun) --> lit_is, determiner.
 sSentenceConnector(noun) --> lit_are.
- 
+
+% Special cases for unary predicates ...
+
 sSentenceSuffix(verb, DrsIn, ReferentList, DrsOut) -->
-  [PREDICATE_NAME],
+  [PredicateName],
+  {
+    length(ReferentList, Len),
+    Len > 1,
+    valid_predicate(PredicateName, 1),
+    \+ valid_preposition(PredicateName, _),
+    DrsIn = drs(RefsIn, CondsIn),
+    append(ReferentList, RefsIn, RefsOut),
+    encapsuleListInFunctor(ReferentList, PredicateName, CondsNew),
+    append(CondsNew, CondsIn, CondsOut),
+    DrsOut = drs(RefsOut, CondsOut)
+  }.
+
+sSentenceSuffix(_, DrsIn, ReferentList, DrsOut) -->
+  lit_are,
+  [PredicateName],
+  {
+    length(ReferentList, Len),
+    Len > 1,
+    valid_predicate(PredicateName, 1),
+    \+ valid_preposition(PredicateName, _),
+    DrsIn = drs(RefsIn, CondsIn),
+    append(ReferentList, RefsIn, RefsOut),
+    encapsuleListInFunctor(ReferentList, PredicateName, CondsNew),
+    append(CondsNew, CondsIn, CondsOut),
+    DrsOut = drs(RefsOut, CondsOut)
+  }.
+
+
+% Standard structure sentences ...
+
+sSentenceSuffix(verb, DrsIn, ReferentList, DrsOut) -->
+  [PredicateName],
   optionalIdList,
   {
-    valid_predicate(PREDICATE_NAME),
-    \+valid_preposition(PREDICATE_NAME, _),
+    valid_predicate(PredicateName, _),
+    \+valid_preposition(PredicateName, _),
     DrsIn = drs(Referents, Conditions),
     append(ReferentList, Referents, RefsOut),
-    encapsuleListInFunctor(ReferentList, PREDICATE_NAME, NewConditions),
-    append(NewConditions, Conditions, CondsOut),
-    DrsOut = drs(RefsOut, CondsOut)
+    buildDrsPredicate(PredicateName, ReferentList, NewCondition),
+    DrsOut = drs(RefsOut, [NewCondition|Conditions])
   }.
 
 sSentenceSuffix(verb, DrsIn, ReferentList, DrsOut) -->
-  [PREDICATE_NAME],
-  structPrepositionPhrase(PREDICATE_NAME, sStentence, DrsIn, ReferentList, DrsOut).
+  [PredicateName],
+  structPrepositionPhrase(PredicateName, sStentence, DrsIn, ReferentList, DrsOut).
 
 sSentenceSuffix(adjective, DrsIn, ReferentList, DrsOut) -->
   is_are,
-  [PREDICATE_NAME],
+  [PredicateName],
   {
-    valid_predicate(PREDICATE_NAME),
-    \+valid_preposition(PREDICATE_NAME, _),
+    valid_predicate(PredicateName, _),
+    \+valid_preposition(PredicateName, _),
     DrsIn = drs(Referents, Conditions),
     append(ReferentList, Referents, RefsOut),
-    encapsuleListInFunctor(ReferentList, PREDICATE_NAME, NewConditions),
-    append(NewConditions, Conditions, CondsOut),
-    DrsOut = drs(RefsOut, CondsOut)
+    buildDrsPredicate(PredicateName, ReferentList, NewCondition),
+    DrsOut = drs(RefsOut, [NewCondition|Conditions])
   }.
 
 sSentenceSuffix(adjective, DrsIn, ReferentList, DrsOut) -->
   is_are,
-  [PREDICATE_NAME],
-  structPrepositionPhrase(PREDICATE_NAME, sSentence, DrsIn, ReferentList, DrsOut).
+  [PredicateName],
+  structPrepositionPhrase(PredicateName, sSentence, DrsIn, ReferentList, DrsOut).
 
-structPrepositionPhrase(PRED, sSentence, DrsIn, ReferentList, DrsOut) -->
-  [PREPOSITION],
+structPrepositionPhrase(Predicate, sSentence, DrsIn, ReferentList, DrsOut) -->
+  [Preposition],
   idList([], MoreReferents),
   {
-    valid_predicate(PRED),
-    valid_preposition(PRED, PREPOSITION)
+    valid_predicate(Predicate, _),
+    valid_preposition(Predicate, Preposition),
+    DrsIn = drs(RefsIn, CondsIn),
+    append(MoreReferents, ReferentList, RefsNew),
+    append(RefsNew, RefsIn, RefsOut),
+    buildDrsPredicate(Predicate, RefsNew, NewCondition),
+    DrsOut = drs(RefsOut, [NewCondition, CondsIn])
   }.
 
-sSentence --> determiner, [FUNCTION_NAME], lit_of, argList(tSentence), lit_is, [FUNCTION_VAL], {verify_not_reserved(FUNCTION_NAME), verify_not_reserved(FUNCTION_VAL)}.
+sSentence -->
+  determiner,
+  [FUNCTION_NAME],
+  lit_of,
+  argList(tSentence),
+  lit_is,
+  [FUNCTION_VAL],
+  {
+    verify_not_reserved(FUNCTION_NAME),
+    verify_not_reserved(FUNCTION_VAL)
+  }.
 
 %TODO: Refactor repeating extra arguments.
