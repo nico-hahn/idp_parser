@@ -105,11 +105,7 @@ assert_predicate(Predicate, Arity) :-
   retract(valid_predicate(Predicate, X)),
   assertz(valid_predicate(Predicate, Arity)).
 
-% If predicate exists and new arity is smaller, do nothing
-assert_predicate(Predicate, Arity) :-
-  valid_predicate(Predicate, X),
-  number(X).
-
 % If nothing of the above, assert the predicate
 assert_predicate(Predicate, Arity) :-
+  \+ valid_predicate(Predicate, _),
   assertz(valid_predicate(Predicate, Arity)).
