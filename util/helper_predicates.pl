@@ -18,7 +18,7 @@ buildDrsPredicate(PName, Args, Predicate) :-
 % and returns a list [pred(a, x), pred(b, x), pred(c, x), ...]
 buildDrsBinaryPredicates(PName, Args, Predicates) :-
   last(Args, Last),
-  append(Arguments, Last, Args),
+  append(Arguments, [Last], Args),
   buildBinaryPreds(PName, Arguments, Last, Predicates).
 
 buildBinaryPreds(Name, [], Last, []).
