@@ -8,4 +8,11 @@ test(encapsuleListInFunctor_Fail, [fail]) :-
 test(buildDrsPredicate) :-
   buildDrsPredicate(pred, [b, c], pred(b, c)).
 
+test(binaryPredicate) :-
+  buildDrsBinaryPredicates(
+    pred,
+    [a, b, c, d, x],
+    [pred(a, x), pred(b, x), pred(c, x), pred(d, x)]
+  ).
+
 :- end_tests(helperTests).

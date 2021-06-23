@@ -107,6 +107,24 @@ sSentenceSuffix(adjective, DrsIn, ReferentList, DrsOut) -->
   [PredicateName],
   structPrepositionPhrase(PredicateName, sSentence, DrsIn, ReferentList, DrsOut).
 
+% special preposition phrase rule
+structPrepositionPhrase(Predicate, sSentence, DrsIn, ReferentList, DrsOut) -->
+  [Preposition],
+  idList([], MoreReferents),
+  {
+    append(ReferentList, MoreReferents, Referents),
+    length(Referents, Len),
+    Len > 2,
+    valid_predicate(Predicate, 2),
+    valid_preposition(Predicate, Preposition),
+    DrsIn = drs(RefsIn, CondsIn),
+    append(Referents, RefsIn, RefsOut),
+    buildDrsBinaryPredicates(Predicate, Referents, NewConds),
+    append(NewConds, CondsIn, CondsOut),
+    DrsOut = drs(RefsOut, CondsOut)
+  }.
+
+% standard preposition phrase rule
 structPrepositionPhrase(Predicate, sSentence, DrsIn, ReferentList, DrsOut) -->
   [Preposition],
   idList([], MoreReferents),

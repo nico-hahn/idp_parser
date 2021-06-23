@@ -13,7 +13,21 @@ encapsuleListInFunctor(InputList, Functor, OutputList) :-
 % puts it into a predicate pred(a, b, c, ...)
 buildDrsPredicate(PName, Args, Predicate) :-
   Predicate =.. [PName|Args].
-  
+
+% Takes a list [a, b, c, ..., x] and a predicate name 'pred'
+% and returns a list [pred(a, x), pred(b, x), pred(c, x), ...]
+buildDrsBinaryPredicates(PName, Args, Predicates) :-
+  last(Args, Last),
+  append(Arguments, Last, Args),
+  buildBinaryPreds(PName, Arguments, Last, Predicates).
+
+buildBinaryPreds(Name, [], Last, []).
+buildBinaryPreds(Name, Args, Last, Predicates) :-
+  Args = [Arg|ArgsRest],
+  Predicate =.. [Name, Arg, Last],
+  Predicates = [Predicate|PredicatesRest],
+  buildBinaryPreds(Name, ArgsRest, Last, PredicatesRest).
+
 % Takes a main drs, an antecedent drc and a consequence drs
 % and builds that into the main drs
 buildDrsImplication(DrsIn, DrsAntecedent, DrsConsequent, DrsOut) :-
