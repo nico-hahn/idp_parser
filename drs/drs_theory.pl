@@ -41,7 +41,7 @@ neg(_) --> lit_not.
 
 superTSentence(DrsIn, DrsOut) -->
   lit_for,
-  arglist(tSentence, notempty, [], ReferentList),
+  arglist(tSentence, notempty, ReferentList),
   lit_comma,
   tSentence(DrsNext, DrsOut),
   {
@@ -59,16 +59,16 @@ log_connective --> cc; cc_or.
 
 % predicates
 predicate(SentenceType, WordType, RefList1, DrsIn, DrsOut) -->
-  [PREDICATE_NAME],
-  prepositional_phrase(PREDICATE_NAME, SentenceType, WordType),
+  [Predicate],
+  prepositional_phrase(Predicate, SentenceType, WordType),
   argList(SentenceType, empty, RefList2),
   {
     DrsIn = drs(RefsIn, CondsIn),
-    verify_not_reserved(PREDICATE_NAME),
+    verify_not_reserved(Predicate),
     append(RefList1, RefList2, Referents),
     length(Referents, Arity),
-    validate_predicate(SentenceType, PREDICATE_NAME, Arity, WordType),
-    buildDrsPredicate(PREDICATE_NAME, Referents, Condition),
+    validate_predicate(SentenceType, Predicate, Arity, WordType),
+    buildDrsPredicate(Predicate, Referents, Condition),
     append(Referents, RefsIn, RefsOut),
     DrsOut = drs(RefsOut, [Condition|CondsIn])
   }.

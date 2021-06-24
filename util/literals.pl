@@ -11,7 +11,7 @@ lit_can --> [can].
 lit_be --> [be].
 lit_has --> [has].
 lit_have --> [have].
-lit_for --> [for].
+lit_for --> [for], quantifier.
 lit_does --> [does].
 lit_do --> [do].
 lit_not --> [not].
@@ -35,4 +35,7 @@ reserved_words -->
   rp; lit_comma, lit_period; lit_if; lit_then; lit_def_begin;
   lit_def_end; lit_there; lit_are; lit_is; lit_can; lit_be; lit_has; lit_have;
   lit_for; lit_does; lit_do; lit_not; lit_the.
-verify_not_reserved(WORD) :- \+ reserved_words([WORD], []). 
+verify_not_reserved(Word) :- 
+  \+ reserved_words([Word], []),
+  \+ type(Word),
+  \+ valid_predicate(Word, _). 

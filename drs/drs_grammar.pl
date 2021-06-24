@@ -21,16 +21,39 @@ sentenceComponent(DrsOut) -->
   implication(drs([], []), DrsOut);
   sSentence(drs([], []), DrsOut);
   definition(drs([], []), DrsOut);
-  quantified_implication(drs([], []), DrsOut).
+  quantified_implication(drs([], []), DrsOut);
+  every_quantification(drs([], []), DrsOut).
 
 superTSentence(DrsIn, DrsOut) -->
   tSentence(DrsIn, DrsOut).
 
 quantified_implication(DrsIn, DrsOut) -->
   lit_for,
-  arglist(tSentence, notempty, DrsIn, DrsNext),
+  arglist(tSentence, notempty, ReferentList),
   lit_comma,
-  implication(DrsNext, DrsOut).
+  implication(DrsNext, DrsOut),
+  {
+    DrsNext = drs(ReferentList, [])
+  }.
+
+% QUANTIFICATIONS
+every_quantification(DrsIn, DrsOut) -->
+  quantifier,
+  [TypeName],
+  [Identifier],
+  predicate(tSentence, _, [Identifier], DrsIn, DrsNex),
+  {
+    type(TypeName),
+    verify_not_reserved(Identifier),
+    buildDrsPredicate(TypeName, Identifier, TypeCondition),
+    DrsNext = drs(RefsNext, CondsNext),
+    remove_intersection(RefsNext, [Identifier], RefsConsequent),
+    DrsOut = drs (
+      drs([Identifier], [TypeCondition]),
+      drs(RefsConsequent, CondsNext)
+    )
+  }.
+
 
 % IMPLICATIONS
 implication(DrsIn, DrsOut) -->
