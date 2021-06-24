@@ -1,9 +1,20 @@
 % generic arglist rules
 
+argList(SentenceType, RefsOut) -->
+  argList(SentenceType, notempty, RefsOut).
+
 argList(SentenceType, EmptyAllowed, RefsOut) -->
   argList(SentenceType, EmptyAllowed, [], RefsOut).
 
 argList(_, empty, _, []) --> [].
+
+argList(sSentence, _, RefsIn, RefsOut) --> 
+  [Identifier],
+  moreArgs(sSentence, [Identifier|RefsIn], RefsOut), 
+  {
+    verify_not_reserved(Identifier)
+    % TODO: Make sure that all members of RefsOut and Identifier are distinct.
+  }.
 
 argList(vSentence, _, RefsIn, RefsOut) -->
   determiner,

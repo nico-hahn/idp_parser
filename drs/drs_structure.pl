@@ -1,28 +1,13 @@
 %----------------------------
 % Structure production
 
-idList(RefsIn, RefsOut) -->
-  [IDENTIFIER],
-  moreIdList(RefsIn, RefsOut), 
-  {
-    verify_not_reserved(IDENTIFIER),
-    RefsOut = [IDENTIFIER|RefsIn]
-  }.
-moreIdList(Refs, Refs) --> [].
-moreIdList(RefsIn, RefsOut) -->
-  cc,
-  idList(RefsIn, RefsOut).
-optionalIdList(RefsIn, RefsOut) -->
-  idList(RefsIn, RefsOut);
-  [].
-
 sSentence(DrsIn, DrsOut) -->
   sSentenceTyped(noun, DrsIn, DrsOut);
   sSentenceTyped(verb, DrsIn, DrsOut);
   sSentenceTyped(adjective, DrsIn, DrsOut).
 
 sSentenceTyped(TYPE, DrsIn, DrsOut) -->
-  idList([], ReferentList),
+  argList(sSentence, ReferentList),
   sSentenceSuffix(TYPE, DrsIn, ReferentList, DrsOut).
 
 sSentenceSuffix(noun, DrsIn, ReferentList, DrsOut) -->
@@ -76,7 +61,7 @@ sSentenceSuffix(_, DrsIn, ReferentList, DrsOut) -->
 
 sSentenceSuffix(verb, DrsIn, ReferentList, DrsOut) -->
   [PredicateName],
-  optionalIdList,
+  argList(sSentence, empty, MoreReferents),
   {
     valid_predicate(PredicateName, _),
     \+valid_preposition(PredicateName, _),
@@ -110,7 +95,7 @@ sSentenceSuffix(adjective, DrsIn, ReferentList, DrsOut) -->
 % special preposition phrase rule
 structPrepositionPhrase(Predicate, sSentence, DrsIn, ReferentList, DrsOut) -->
   [Preposition],
-  idList([], MoreReferents),
+  argList(sSentence, MoreReferents),
   {
     append(ReferentList, MoreReferents, Referents),
     length(Referents, Len),
@@ -127,7 +112,7 @@ structPrepositionPhrase(Predicate, sSentence, DrsIn, ReferentList, DrsOut) -->
 % standard preposition phrase rule
 structPrepositionPhrase(Predicate, sSentence, DrsIn, ReferentList, DrsOut) -->
   [Preposition],
-  idList([], MoreReferents),
+  argList(sSentence, MoreReferents),
   {
     valid_predicate(Predicate, _),
     valid_preposition(Predicate, Preposition),

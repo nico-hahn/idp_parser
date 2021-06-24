@@ -29,6 +29,9 @@ test(argList) :-
   ),
   assertion(
     argList(tSentence, notempty, [id2, id1], [a, tree, id1, and, id2], [])
+  ),
+  assertion(
+    argList(sSentence, [id3, id2, id1], [id1, and, id2, and, id3], [])
   ).
 
 test(predicateDefinitions) :-
