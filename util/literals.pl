@@ -36,6 +36,4 @@ reserved_words -->
   lit_def_end; lit_there; lit_are; lit_is; lit_can; lit_be; lit_has; lit_have;
   lit_for; lit_does; lit_do; lit_not; lit_the.
 verify_not_reserved(Word) :- 
-  \+ reserved_words([Word], []),
-  \+ type(Word),
-  \+ valid_predicate(Word, _). 
+  \+ reserved_words([Word], []). 
