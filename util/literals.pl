@@ -2,8 +2,8 @@ lit_comma --> [','].
 lit_period --> ['.'].
 lit_if --> [if].
 lit_then --> [then].
-lit_def_begin --> ['we define the following:'].
-lit_def_end --> ['<def. end>'].
+lit_def_begin --> [we, define, the, following, ':'].
+lit_def_end --> ['end, of, definition, '.'].
 lit_there --> [there].
 lit_are --> [are].
 lit_is --> [is].

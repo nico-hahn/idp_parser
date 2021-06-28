@@ -39,6 +39,9 @@ test(predicateDefinitions) :-
     sentenceComponent(_, [an, area, can, border, an, area], [])
   ),
   assertion(
+    sentenceComponent(_, [a, tree, can, be, tall], [])
+  ),
+  assertion(
     sentenceComponent(_, [a, tree, and, a, tree, can, be, friends], [])
   ),
   assertion(

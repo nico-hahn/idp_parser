@@ -79,13 +79,20 @@ implication(DrsIn, DrsOut) -->
 definition(DrsIn, DrsOut) -->
   lit_def_begin,
   sentenceLoop(DrsIn, DrsOut),
-  lit_def_end.
+  lit_def_end,
+  {
+    DrsOut = drs(_, [definition|_])
+  }.
 
-sentenceLoop(_, _) --> [].
+sentenceLoop(_, drs([], [])) --> [].
 sentenceLoop(DrsIn, DrsOut) -->
-  superTSentence(DrsIn, DrsNext),
+  superTSentence(drs([], []), DrsNext),
   lit_period,
-  sentenceLoop(DrsNext, DrsOut).
+  sentenceLoop(DrsNext, DrsOut),
+  {
+    DrsIn = drs(RefsIn, _),
+    DrsOut = drs(RefsIn, [DrsNext|_])
+  }.
 
 %-----------------------------
 % ASSERTIONS
