@@ -31,9 +31,9 @@ quantified_implication(DrsIn, DrsOut) -->
   lit_for,
   arglist(tSentence, notempty, ReferentList),
   lit_comma,
-  implication(DrsNext, DrsOut),
+  implication(drs([], []), DrsImp),
   {
-    DrsNext = drs(ReferentList, [])
+    DrsNext = drs(ReferentList, [DrsImp])
   }.
 
 % QUANTIFICATIONS
