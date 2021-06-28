@@ -50,12 +50,18 @@ superTSentence(DrsIn, DrsOut) -->
     DrsNext = drs(RefsNext, CondsIn)
   }.
 
-superTSentence -->
-  tSentence,
-  log_connective,
-  superTSentence.
+superTSentence(DrsIn, DrsOut) -->
+  tSentence(DrsIn, DrsNext),
+  cc,
+  superTSentence(DrsNext, DrsOut).
 
-log_connective --> cc; cc_or.
+superTSentence(DrsIn, DrsOut) -->
+  tSentence(DrsIn, DrsNext1),
+  cc_or,
+  superTSentence(drs([], []), DrsNext2),
+  {
+    DrsOut = drs([], drsOr(DrsNext1, DrsNext2))
+  }.
 
 % predicates
 predicate(SentenceType, WordType, RefList1, DrsIn, DrsOut) -->
