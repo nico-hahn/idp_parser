@@ -81,7 +81,7 @@ sSentenceSuffix(adjective, DrsIn, ReferentList, DrsOut) -->
   is_are,
   [PredicateName],
   {
-    length(ReferentList, Len)
+    length(ReferentList, Len),
     valid_predicate(PredicateName, Len),
     \+valid_preposition(PredicateName, _),
     DrsIn = drs(Referents, Conditions),
@@ -118,7 +118,7 @@ structPrepositionPhrase(Predicate, sSentence, DrsIn, ReferentList, DrsOut) -->
   argList(sSentence, MoreReferents),
   {
     append(ReferentList, MoreReferents, Referents),
-    length(Referents, Len)
+    length(Referents, Len),
     valid_predicate(Predicate, Len),
     valid_preposition(Predicate, Preposition),
     DrsIn = drs(RefsIn, CondsIn),

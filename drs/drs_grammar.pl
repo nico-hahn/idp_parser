@@ -48,7 +48,7 @@ every_quantification(DrsIn, DrsOut) -->
     buildDrsPredicate(TypeName, Identifier, TypeCondition),
     DrsNext = drs(RefsNext, CondsNext),
     remove_intersection(RefsNext, [Identifier], RefsConsequent),
-    DrsOut = drs (
+    DrsOut = drs(
       drs([Identifier], [TypeCondition]),
       drs(RefsConsequent, CondsNext)
     )
