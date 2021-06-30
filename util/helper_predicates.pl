@@ -41,6 +41,6 @@ buildDrsImplication(DrsIn, DrsAntecedent, DrsConsequent, DrsOut) :-
 % Result is in list3.
 remove_intersection([], _, []).
 remove_intersection([X|Tail], L2, Result) :- 
-  member(X, L2), !, remove_list(Tail, L2, Result). 
+  member(X, L2), !, remove_intersection(Tail, L2, Result). 
 remove_intersection([X|Tail], L2, [X|Result]) :-
-  remove_list(Tail, L2, Result).
+  remove_intersection(Tail, L2, Result).

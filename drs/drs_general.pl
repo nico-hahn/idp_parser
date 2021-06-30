@@ -1,3 +1,5 @@
+:- use_module(library(lists)).
+
 % generic arglist rules
 
 argList(SentenceType, RefsOut) -->
@@ -33,7 +35,11 @@ argList(tSentence, _, RefsIn, RefsOut) -->
     % TODO: Make sure that all members of RefsOut and Identifier are distinct.
   }.
 
-moreArgs(_, X, X) --> [].
+moreArgs(_, RefsIn, RefsOut) -->
+  [],
+  {
+    reverse(RefsIn, RefsOut)
+  }.
 moreArgs(X, RefsIn, RefsOut) -->
   cc,
   argList(X, notempty, RefsIn, RefsOut).

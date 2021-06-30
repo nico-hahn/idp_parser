@@ -15,4 +15,7 @@ test(binaryPredicate) :-
     [pred(a, x), pred(b, x), pred(c, x), pred(d, x)]
   ).
 
+test(removeIntersetion) :-
+  remove_intersection([a, b, c, d], [b, d], [a, c]).
+
 :- end_tests(helperTests).
