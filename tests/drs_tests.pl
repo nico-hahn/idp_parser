@@ -34,8 +34,8 @@ test(definition) :-
 test(quant_imp) :-
   assertion(
     sentenceComponent(
-      [drs([t1, t2], [drsImpl(drs([], [friends(t1, t2)]), drs([], [friends(t2, t1)]))])],
-      [for, all, t1, t2, if, t1, and, t2, are, friends, ',', then, t2, and, t1, are, friends, '.'],
+      drs([t1, t2], [drsImpl(drs([t1, t2], [friends(t1, t2)]), drs([], [friends(t2, t1)]))]),
+      [for, all, t1, and, t2, ',', if, t1, and, t2, are, friends, ',', then, t2, and, t1, are, friends],
       []
     )
   ).

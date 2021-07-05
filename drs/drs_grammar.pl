@@ -27,14 +27,12 @@ sentenceComponent(DrsOut) -->
 superTSentence(DrsIn, DrsOut) -->
   tSentence(DrsIn, DrsOut).
 
-quantified_implication(DrsIn, DrsOut) -->
+quantified_implication(DrsIn, DrsImp) -->
   lit_for,
-  arglist(tSentence, notempty, ReferentList),
+  quantifier,
+  argList(sSentence, notempty, ReferentList),
   lit_comma,
-  implication(drs([], []), DrsImp),
-  {
-    DrsNext = drs(ReferentList, [DrsImp])
-  }.
+  implication(drs(ReferentList, []), DrsImp).
 
 % QUANTIFICATIONS
 every_quantification(DrsIn, DrsOut) -->

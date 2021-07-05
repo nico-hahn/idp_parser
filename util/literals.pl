@@ -11,7 +11,7 @@ lit_can --> [can].
 lit_be --> [be].
 lit_has --> [has].
 lit_have --> [have].
-lit_for --> [for], quantifier.
+lit_for --> [for].
 lit_does --> [does].
 lit_do --> [do].
 lit_not --> [not].
