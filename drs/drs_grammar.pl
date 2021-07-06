@@ -17,15 +17,15 @@ sentence -->
 sentenceComponent(_) --> vSentence. % Vocabulary sentences don't produce DRS
 
 sentenceComponent(DrsOut) -->
-  superTSentence(drs([], []), DrsOut);
-  implication(drs([], []), DrsOut);
   sSentence(drs([], []), DrsOut);
   definition(drs([], []), DrsOut);
+  theoryComponent(drs([], []), DrsOut).
+
+theoryComponent(DrsIn, DrsOut) -->
+  superTSentence(DrsIn, DrsOut);
+  implication(DrsIn, DrsOut);
   quantified_implication(drs([], []), DrsOut);
   every_quantification(drs([], []), DrsOut).
-
-superTSentence(DrsIn, DrsOut) -->
-  tSentence(DrsIn, DrsOut).
 
 quantified_implication(DrsIn, DrsImp) -->
   lit_for,
@@ -39,7 +39,7 @@ every_quantification(DrsIn, DrsOut) -->
   quantifier,
   [TypeName],
   [Identifier],
-  predicate(tSentence, _, [Identifier], DrsIn, DrsNex),
+  predicate(tSentence, _, [Identifier], DrsIn, DrsNext),
   {
     type(TypeName),
     verify_not_reserved(Identifier),
@@ -76,20 +76,21 @@ implication(DrsIn, DrsOut) -->
 % DEFINITIONS
 definition(DrsIn, DrsOut) -->
   lit_def_begin,
-  sentenceLoop(DrsIn, DrsOut),
+  sentenceLoop(DrsOuts),
   lit_def_end,
   {
-    DrsOut = drs(_, [definition|_])
+    DrsIn = drs(RefsIn, CondsIn),
+    append([definition|DrsOuts], CondsIn, CondsOut),
+    DrsOut = drs(RefsIn, CondsOut)
   }.
 
-sentenceLoop(_, drs([], [])) --> [].
-sentenceLoop(DrsIn, DrsOut) -->
-  superTSentence(drs([], []), DrsNext),
+sentenceLoop([]) --> [].
+sentenceLoop(DrsOuts) -->
+  theoryComponent(drs([], []), DrsNext),
   lit_period,
-  sentenceLoop(DrsNext, DrsOut),
+  sentenceLoop(DrsO),
   {
-    DrsIn = drs(RefsIn, _),
-    DrsOut = drs(RefsIn, [DrsNext|_])
+    DrsOuts = [DrsNext|DrsO]
   }.
 
 %-----------------------------

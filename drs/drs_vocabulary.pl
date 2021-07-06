@@ -10,19 +10,19 @@ vSentence -->
 
 % predicate declarations
 vSentence -->
-  argList(vSentence, notempty, RefList1),
+  argList(vSentence, RefList1),
   lit_can,
   lit_be,
   predicate(vSentence, adjective, RefList1, drs([], []), _).
 
 vSentence -->
-  argList(vSentence, notempty, RefList1),
+  argList(vSentence, RefList1),
   lit_can,
   predicate(vSentence, verb, RefList1, drs([], []), _).
 
 % function declaration
 vSentence -->
-  argList(vSentence, notempty, _),
+  argList(vSentence, _),
   lit_can,
   lit_have,
   determiner,

@@ -1,7 +1,7 @@
 % TODO: Put common extra goals into a predicate
 
 tSentence(DrsIn, DrsOutNeg) -->
-  argList(tSentence, notempty, RefList1),
+  argList(tSentence, RefList1),
   is_are,
   neg(adjective),
   predicate(tSentence, _, RefList1, DrsIn, DrsOut),
@@ -11,12 +11,12 @@ tSentence(DrsIn, DrsOutNeg) -->
   }.
 
 tSentence(DrsIn, DrsOut) -->
-  argList(tSentence, notempty, RefList1),
+  argList(tSentence, RefList1),
   is_are,
   predicate(tSentence, _, RefList1, DrsIn, DrsOut).
 
 tSentence(DrsIn, DrsOutNeg) -->
-  argList(tSentence, notempty, RefList1),
+  argList(tSentence, RefList1),
   neg(verb),
   predicate(tSentence, _, RefList1, DrsIn, DrsOut),
   {
@@ -25,7 +25,7 @@ tSentence(DrsIn, DrsOutNeg) -->
   }.
 
 tSentence(DrsIn, DrsOutNeg) -->
-  argList(tSentence, notempty, RefList1),
+  argList(tSentence, RefList1),
   is_are,
   neg(noun),
   determiner,
@@ -40,8 +40,11 @@ neg(verb) --> lit_do, lit_not.
 neg(_) --> lit_not.
 
 superTSentence(DrsIn, DrsOut) -->
+  tSentence(DrsIn, DrsOut).
+
+superTSentence(DrsIn, DrsOut) -->
   lit_for,
-  arglist(tSentence, notempty, ReferentList),
+  argList(tSentence, ReferentList),
   lit_comma,
   tSentence(DrsNext, DrsOut),
   {
@@ -75,7 +78,8 @@ predicate(SentenceType, WordType, RefList1, DrsIn, DrsOut) -->
     length(Referents, Arity),
     validate_predicate(SentenceType, Predicate, Arity, WordType),
     buildDrsPredicate(Predicate, Referents, Condition),
-    append(Referents, RefsIn, RefsOut),
+    remove_intersection(Referents, RefsIn, RefsNew),
+    append(RefsNew, RefsIn, RefsOut),
     DrsOut = drs(RefsOut, [Condition|CondsIn])
   }.
 

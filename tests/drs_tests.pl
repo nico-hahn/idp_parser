@@ -16,10 +16,42 @@ test(implications) :-
     )
   ).
 
-test(definition) :-
+test(andConnection) :-
+  assertion(
+    superTSentence(
+      drs([], []),
+      drs([t3, t1, t2], [friends(t2, t3), friends(t1, t2)]),
+      [t1, and, t2, are, friends, and, t2, and, t3, are, friends],
+      []
+    )
+  ).
+
+test(definitionEmpty) :- 
   assertion(
     sentenceComponent(
-      [drs([], [definition, drs([], [drsImpl(drs([t1, t2, t3], [friends(t1, t2), friends(t2, t3)]), drs([], [friends(t1, t3)]))])])],
+      drs([], [definition]),
+      [we, define, the, following, ':', end, of, definition, '.'],
+      []
+    )
+  ).
+
+test(definitionSimple) :-
+  assertion(
+    sentenceComponent(
+      drs([], [definition, drs([t1], [tall(t1)])]),
+      [
+        we, define, the, following, ':',
+        the, tree, t1, is, tall, '.',
+        end, of, definition, '.'
+      ],
+      []
+    )
+  ).
+
+test(definitionComplex) :-
+  assertion(
+    sentenceComponent(
+      drs([], [definition, drs([], [drsImpl(drs([t3, t1, t2], [friends(t2, t3), friends(t1, t2)]), drs([], [friends(t1, t3)]))])]),
       [
         we, define, the, following, ':',
         if, a, tree, t1, and, t2, are, friends,

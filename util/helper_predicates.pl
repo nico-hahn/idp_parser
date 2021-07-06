@@ -21,7 +21,7 @@ buildDrsBinaryPredicates(PName, Args, Predicates) :-
   append(Arguments, [Last], Args),
   buildBinaryPreds(PName, Arguments, Last, Predicates).
 
-buildBinaryPreds(Name, [], Last, []).
+buildBinaryPreds(_, [], _, []).
 buildBinaryPreds(Name, Args, Last, Predicates) :-
   Args = [Arg|ArgsRest],
   Predicate =.. [Name, Arg, Last],
