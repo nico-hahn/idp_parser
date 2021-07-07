@@ -113,17 +113,34 @@ validate_preposition(tSentence, P, PREP, _) :-
   valid_preposition(P, PREP).
 
 % functions
-tSentence -->
-  [IDENTIFIER],
-  functionOperatorPhrase,
-  determiner,
-  [FUNCTION_NAME],
-  lit_of,
-  argList(tSentence),
+tSentence(DrsIn, DrsOut) -->
+  functionPhrase(Refs1, FunctionTerm1),
+  functionOperatorPhrase(Operation),
+  functionPhrase(Refs2, FunctionTerm2),
   {
-    verify_not_reserved(IDENTIFIER),
-    function(FUNCTION_NAME)
+    DrsIn = drs(RefsIn, CondsIn),
+    append(Refs2, Refs1, RefsFunc),
+    append(RefsFunc, RefsIn, RefsOut),
+    buildDrsPredicate(Operation, [FunctionTerm1, FunctionTerm2], FunctionCond),
+    DrsOut = drs(RefsOut, [FunctionCond|CondsIn])
   }.
-functionOperatorPhrase --> lit_is.
-functionOperatorPhrase --> lit_is, lit_not.
-functionOperatorPhrase --> lit_is, lit_different, lit_from.
+
+functionPhrase([], Identifier) -->
+  [Identifier],
+  {
+    verify_not_reserved(Identifier)
+  }.
+
+functionPhrase(Referents, Function) -->
+  determiner,
+  [FunctionName],
+  lit_of,
+  argList(tSentence, Referents),
+  {
+    verify_not_reserved(FunctionName),
+    buildDrsPredicate(FunctionName, Referents, Function)
+  }.
+
+functionOperatorPhrase(equal) --> lit_is.
+functionOperatorPhrase(notEqual) --> lit_is, lit_not.
+functionOperatorPhrase(notEqual) --> lit_is, lit_different, lit_from.

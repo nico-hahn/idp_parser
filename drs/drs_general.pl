@@ -1,6 +1,6 @@
 :- use_module(library(lists)).
 
-% generic arglist rules
+% generic argList rules
 
 argList(SentenceType, RefsOut) -->
   argList(SentenceType, notempty, RefsOut).

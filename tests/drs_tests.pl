@@ -83,9 +83,40 @@ test(everyQuant) :-
 
 test(functionStructure) :-
   assertion(
-    sentenceComponent(
+    sSentence(
+      drs([], []),
       drs([barker], [value(owner(barker), peter)]),
       [the, owner, of, the, dog, barker, is, peter],
+      []
+    )
+  ).
+
+test(functionTheory1) :-
+  assertion(
+    tSentence(
+      drs([], []),
+      drs([dog2, dog1], [notEqual(owner(dog1), owner(dog2))]),
+      [the, owner, of, the, dog, dog1, is, not, the, owner, of, dog2],
+      []
+    )
+  ).
+
+test(functionTheory2) :-
+  assertion(
+    tSentence(
+      drs([], []),
+      drs([dog1], [notEqual(owner(dog1), peter)]),
+      [the, owner, of, the, dog, dog1, is, different, from, peter],
+      []
+    )
+  ).
+
+test(functionTheory3) :-
+  assertion(
+    tSentence(
+      drs([], []),
+      drs([dog1], [equal(peter, owner(dog1))]),
+      [peter, is, the, owner, of, the, dog, dog1],
       []
     )
   ).
