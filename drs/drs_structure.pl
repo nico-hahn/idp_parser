@@ -127,16 +127,20 @@ structPrepositionPhrase(Predicate, sSentence, DrsIn, ReferentList, DrsOut) -->
     DrsOut = drs(RefsOut, [NewCondition|CondsIn])
   }.
 
-sSentence -->
+sSentence(DrsIn, DrsOut) -->
   determiner,
-  [FUNCTION_NAME],
+  [FunctionName],
   lit_of,
-  argList(tSentence),
+  argList(tSentence, Referents),
   lit_is,
-  [FUNCTION_VAL],
+  [FunctionVal],
   {
-    verify_not_reserved(FUNCTION_NAME),
-    verify_not_reserved(FUNCTION_VAL)
+    verify_not_reserved(FunctionName),
+    verify_not_reserved(FunctionVal),
+    DrsIn = drs(RefsIn, CondsIn),
+    append(Referents, RefsIn, RefsOut),
+    buildDrsPredicate(FunctionName, Referents, Function),
+    DrsOut = drs(RefsOut, [value(Function, FunctionVal)|CondsIn])
   }.
 
 %TODO: Refactor repeating extra arguments.

@@ -63,7 +63,7 @@ test(definitionComplex) :-
     )
   ).
 
-test(quant_imp) :-
+test(quantImp) :-
   assertion(
     sentenceComponent(
       drs([t1, t2], [drsImpl(drs([t1, t2], [friends(t1, t2)]), drs([], [friends(t2, t1)]))]),
@@ -77,6 +77,15 @@ test(everyQuant) :-
     sentenceComponent(
       drs([], [drsImpl(drs([t1], [tree(t1)]), drs([t2], [married(t1, t2)]))]),
       [every, tree, t1, is, married, to, a, flower, t2],
+      []
+    )
+  ).
+
+test(functionStructure) :-
+  assertion(
+    sentenceComponent(
+      drs([barker], [value(owner(barker), peter)]),
+      [the, owner, of, the, dog, barker, is, peter],
       []
     )
   ).
