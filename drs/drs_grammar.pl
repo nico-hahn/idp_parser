@@ -24,8 +24,8 @@ sentenceComponent(DrsOut) -->
 theoryComponent(DrsIn, DrsOut) -->
   superTSentence(DrsIn, DrsOut);
   implication(DrsIn, DrsOut);
-  quantified_implication(drs([], []), DrsOut);
-  every_quantification(drs([], []), DrsOut).
+  quantified_implication(DrsIn, DrsOut);
+  every_quantification(DrsIn, DrsOut).
 
 quantified_implication(DrsIn, DrsImp) -->
   lit_for,
@@ -39,16 +39,22 @@ every_quantification(DrsIn, DrsOut) -->
   quantifier,
   [TypeName],
   [Identifier],
+  is_are_optional,
   predicate(tSentence, _, [Identifier], DrsIn, DrsNext),
   {
     type(TypeName),
     verify_not_reserved(Identifier),
-    buildDrsPredicate(TypeName, Identifier, TypeCondition),
+    buildDrsPredicate(TypeName, [Identifier], TypeCondition),
     DrsNext = drs(RefsNext, CondsNext),
     remove_intersection(RefsNext, [Identifier], RefsConsequent),
     DrsOut = drs(
-      drs([Identifier], [TypeCondition]),
-      drs(RefsConsequent, CondsNext)
+      [],
+      [
+        drsImpl(
+          drs([Identifier], [TypeCondition]),
+          drs(RefsConsequent, CondsNext)
+        )
+      ]
     )
   }.
 

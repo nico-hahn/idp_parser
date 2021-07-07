@@ -72,4 +72,13 @@ test(quant_imp) :-
     )
   ).
 
+test(everyQuant) :-
+  assertion(
+    sentenceComponent(
+      drs([], [drsImpl(drs([t1], [tree(t1)]), drs([t2], [married(t1, t2)]))]),
+      [every, tree, t1, is, married, to, a, flower, t2],
+      []
+    )
+  ).
+
 :- end_tests(drsTests).
