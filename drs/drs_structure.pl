@@ -12,13 +12,13 @@ sSentenceTyped(TYPE, DrsIn, DrsOut) -->
 
 sSentenceSuffix(noun, DrsIn, ReferentList, DrsOut) -->
   sSentenceConnector(noun),
-  [TYPE_NAME],
+  [TypeName],
   {
-    type(TYPE_NAME),
+    type(TypeName),
     DrsIn = drs(Referents, Conditions),
     append(ReferentList, Referents, RefsOut),
-    %TODO: Singularize TYPE_NAME here
-    encapsuleListInFunctor(ReferentList, TYPE_NAME, NewConditions),
+    singularize(TypeName, Singular),
+    encapsuleListInFunctor(ReferentList, Singular, NewConditions),
     append(NewConditions, Conditions, CondsOut),
     DrsOut = drs(RefsOut, CondsOut)
   }.

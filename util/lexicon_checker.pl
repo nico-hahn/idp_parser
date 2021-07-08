@@ -30,5 +30,9 @@ noun(NEW_SG, PL) :-
 noun(_, PL) :-
   writeln(['unknown noun! ', PL, ' word too hard to guess. sorry. :(']),
   fail.
+
+singularize(Word, WordSing) :-
+  noun(WordSing, Word).
+singularize(Word, Word).
   
   

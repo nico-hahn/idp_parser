@@ -32,7 +32,12 @@ quantified_implication(DrsIn, DrsImp) -->
   quantifier,
   argList(sSentence, notempty, ReferentList),
   lit_comma,
-  implication(drs(ReferentList, []), DrsImp).
+  implication(DrsNext, DrsImp),
+  {
+    DrsIn = drs(RefsIn, CondsIn),
+    append(RefsIn, ReferentList, RefsNext),
+    DrsNext = drs(RefsNext, CondsIn)
+  }.
 
 % QUANTIFICATIONS
 every_quantification(DrsIn, DrsOut) -->

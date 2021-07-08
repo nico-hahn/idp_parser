@@ -91,7 +91,7 @@ test(functionStructure) :-
     )
   ).
 
-test(functionTheory1) :-
+test(functionTheory) :-
   assertion(
     tSentence(
       drs([], []),
@@ -99,9 +99,7 @@ test(functionTheory1) :-
       [the, owner, of, the, dog, dog1, is, not, the, owner, of, dog2],
       []
     )
-  ).
-
-test(functionTheory2) :-
+  ),
   assertion(
     tSentence(
       drs([], []),
@@ -109,14 +107,48 @@ test(functionTheory2) :-
       [the, owner, of, the, dog, dog1, is, different, from, peter],
       []
     )
-  ).
-
-test(functionTheory3) :-
+  ),
   assertion(
     tSentence(
       drs([], []),
       drs([dog1], [equal(peter, owner(dog1))]),
       [peter, is, the, owner, of, the, dog, dog1],
+      []
+    )
+  ).
+
+test(structureTypes) :-
+  assertion(
+    sSentence(
+      drs([], []),
+      drs([t1], [tree(t1)]),
+      [t1, is, a, tree],
+      []
+    )
+  ),
+  assertion(
+    sSentence(
+      drs([], []),
+      drs([t1, t2, t3], [tree(t1), tree(t2), tree(t3)]),
+      [t1, and, t2, and, t3, are, trees],
+      []
+    )
+  ).
+
+test(structurePredicated) :-
+  assertion(
+    sSentence(
+      drs([], []),
+      drs([t1, t2, t3], [tall(t1), tall(t2), tall(t3)]),
+      [t1, and, t2, and, t3, are, tall],
+      []
+    )
+  ),
+  assertion(
+    sSentence(
+      drs([], []),
+      drs([t1, t2], [friends(t1, t2)]),
+      [t1, and, t2, are, friends],
       []
     )
   ).
