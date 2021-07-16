@@ -3,6 +3,7 @@
 test(implications) :-
   assertion(
     sentenceComponent(
+      theory,
       drs([], [drsImpl(drs([t1, t2], [friends(t1, t2)]), drs([], [tall(t1)]))]),
       [if, a, tree, t1, and, t2, are, friends, ',', then, the, tree, t1, is, tall],
       []
@@ -10,6 +11,7 @@ test(implications) :-
   ),
   assertion(
     sentenceComponent(
+      theory,
       drs([], [drsImpl(drs([t1, t2], [friends(t1, t2)]), drs([], [tall(t1)]))]),
       [a, tree, t1, is, tall, ',', if, a, tree, t1, and, the, tree, t2, are, friends],
       []
@@ -29,6 +31,7 @@ test(andConnection) :-
 test(definitionEmpty) :- 
   assertion(
     sentenceComponent(
+      theory,
       drs([], [definition]),
       [we, define, the, following, ':', end, of, definition, '.'],
       []
@@ -38,6 +41,7 @@ test(definitionEmpty) :-
 test(definitionSimple) :-
   assertion(
     sentenceComponent(
+      theory,
       drs([], [definition, drs([t1], [tall(t1)])]),
       [
         we, define, the, following, ':',
@@ -51,6 +55,7 @@ test(definitionSimple) :-
 test(definitionComplex) :-
   assertion(
     sentenceComponent(
+      theory,
       drs([], [definition, drs([], [drsImpl(drs([t3, t1, t2], [friends(t2, t3), friends(t1, t2)]), drs([], [friends(t1, t3)]))])]),
       [
         we, define, the, following, ':',
@@ -66,6 +71,7 @@ test(definitionComplex) :-
 test(quantImp) :-
   assertion(
     sentenceComponent(
+      theory,
       drs([t1, t2], [drsImpl(drs([t1, t2], [friends(t1, t2)]), drs([], [friends(t2, t1)]))]),
       [for, all, t1, and, t2, ',', if, t1, and, t2, are, friends, ',', then, t2, and, t1, are, friends],
       []
@@ -75,6 +81,7 @@ test(quantImp) :-
 test(everyQuant) :-
   assertion(
     sentenceComponent(
+      theory,
       drs([], [drsImpl(drs([t1], [tree(t1)]), drs([t2], [married(t1, t2)]))]),
       [every, tree, t1, is, married, to, a, flower, t2],
       []

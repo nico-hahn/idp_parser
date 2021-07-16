@@ -3,11 +3,11 @@
 % TODO: DRS Threading tests go here once the system is set up.
 
 test(types) :-
-  assertion(sentence([there, are, trees, '.'], [])),
-  assertion(sentence([there, are, flowers, '.'], [])),
-  assertion(sentence([there, are, areas, '.'], [])),
-  assertion(sentence([there, are, dogs, '.'], [])),
-  assertion(sentence([there, are, persons, '.'], [])),
+  assertion(sentence(vocabulary, [there, are, trees, '.'], [])),
+  assertion(sentence(vocabulary, [there, are, flowers, '.'], [])),
+  assertion(sentence(vocabulary, [there, are, areas, '.'], [])),
+  assertion(sentence(vocabulary, [there, are, dogs, '.'], [])),
+  assertion(sentence(vocabulary, [there, are, persons, '.'], [])),
   assertion(noun(tree, trees)),
   assertion(noun(flower, flowers)).
 
@@ -36,27 +36,27 @@ test(argList) :-
 
 test(predicateDefinitions) :-
   assertion(
-    sentenceComponent(_, [an, area, can, border, an, area], [])
+    sentenceComponent(vocabulary, _, [an, area, can, border, an, area], [])
   ),
   assertion(
-    sentenceComponent(_, [a, tree, can, be, tall], [])
+    sentenceComponent(vocabulary, _, [a, tree, can, be, tall], [])
   ),
   assertion(
-    sentenceComponent(_, [a, tree, and, a, tree, can, be, friends], [])
+    sentenceComponent(vocabulary, _, [a, tree, and, a, tree, can, be, friends], [])
   ),
   assertion(
-    sentenceComponent(_, [a, tree, can, be, married, to, a, flower], [])
+    sentenceComponent(vocabulary, _, [a, tree, can, be, married, to, a, flower], [])
   ),
   assertion(
-    sentenceComponent(_, [a, flower, can, fly], [])  
+    sentenceComponent(vocabulary, _, [a, flower, can, fly], [])  
   ).
 
 test(functionDefinitions) :-
   assertion(
-    sentenceComponent(_, [an, area, can, have, a, color], [])
+    sentenceComponent(vocabulary, _, [an, area, can, have, a, color], [])
   ),
   assertion(
-    sentenceComponent(_, [a, dog, can, have, an, owner, that, is, a, person], [])
+    sentenceComponent(vocabulary, _, [a, dog, can, have, an, owner, that, is, a, person], [])
   ).
 
 :- end_tests(grammarTests).
