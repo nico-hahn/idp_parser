@@ -1,3 +1,7 @@
+lit_vocabulary --> [vocabulary].
+lit_theory --> [theory].
+lit_structure --> [structure].
+lit_colon --> [':'].
 lit_comma --> [','].
 lit_period --> ['.'].
 lit_if --> [if].
@@ -35,6 +39,7 @@ reserved_words -->
   cc; cc_or; determiner; quantifier;
   rp; lit_comma, lit_period; lit_if; lit_then; lit_def_begin;
   lit_def_end; lit_there; lit_are; lit_is; lit_can; lit_be; lit_has; lit_have;
-  lit_for; lit_does; lit_do; lit_not; lit_the.
+  lit_for; lit_does; lit_do; lit_not; lit_the; lit_vocabulary; lit_theory;
+  lit_structure; lit_colon.
 verify_not_reserved(Word) :- 
   \+ reserved_words([Word], []). 

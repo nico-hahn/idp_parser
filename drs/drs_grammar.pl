@@ -7,12 +7,43 @@
 :- [drs_theory].
 :- [drs_vocabulary].
 
+metaSentence -->
+  metaSentence(X),
+  metaSentence(Y),
+  metaSentence(Z),
+  {
+    X \= Y,
+    X \= Z,
+    Y \= Z
+  }. 
+
+metaSentence(vocabulary) -->
+  lit_vocabulary,
+  lit_colon,
+  sentences(vocabulary).
+
+metaSentence(theory) -->
+  lit_theory,
+  lit_colon,
+  sentences(theory).
+
+metaSentence(structure) -->
+  lit_structure,
+  lit_colon,
+  sentences(structure).
+
+sentences(Section) --> sentence(Section), sentences.
+sentences(Section) --> [].
 % a sentence can be: a super-theory-sentence, a vocabulary-sentence, a structure-sentence, or a definition.
 % every sentence ends with a '.'
-sentence(Section) -->
+sentence(Section) --> sentence(Section, user_output).
+sentence(Section, Stream) -->
   sentenceComponent(Section, DrsOut),
   lit_period,
-  { write(DrsOut) }.
+  {
+    %TODO: Translate the DRS into IDP Code
+    writeln(Stream, DrsOut)
+  }.
 
 sentenceComponent(vocabulary, _) --> vSentence. % Vocabulary sentences don't produce DRS
 
