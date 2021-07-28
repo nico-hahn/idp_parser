@@ -10,9 +10,13 @@
 :- [test].
 
 % Do the work.
+all([])     --> [].
+all([L|Ls]) --> [L], all(Ls).
+
 parse :-
-  readText(user_input, Text),
-  write(Text).
+  phrase_from_stream(all(Ls), user_input),
+  readText(Ls, Words),
+  write(Words).
 
 :- writeln(user_error, '*********** Initiating parser ***********').
 :- parse.
