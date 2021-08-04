@@ -7,33 +7,46 @@
 :- [drs_theory].
 :- [drs_vocabulary].
 
-metaSentence -->
-  metaSentence(X),
-  metaSentence(Y),
-  metaSentence(Z),
+parserGrammar -->
   {
-    X \= Y,
-    X \= Z,
-    Y \= Z
+    log('started parsing...')
+  },
+  metaSentence(vocabulary),
+  metaSentence(theory),
+  metaSentence(structure),
+  {
+    log('...finished parsing')
   }. 
 
 metaSentence(vocabulary) -->
+  {
+    log('...parsing vocabulary...')
+  },
   lit_vocabulary,
   lit_colon,
-  sentences(vocabulary).
+  sentences(vocabulary),
+  {
+    log('...finished vocabulary...')
+  }.
 
 metaSentence(theory) -->
+  {
+    log('...parsing theory...')
+  },
   lit_theory,
   lit_colon,
   sentences(theory).
 
 metaSentence(structure) -->
+  {
+    log('...parsing structure...')
+  },
   lit_structure,
   lit_colon,
   sentences(structure).
 
-sentences(Section) --> sentence(Section), sentences.
-sentences(Section) --> [].
+sentences(_) --> [].
+sentences(Section) --> sentence(Section), sentences(Section).
 % a sentence can be: a super-theory-sentence, a vocabulary-sentence, a structure-sentence, or a definition.
 % every sentence ends with a '.'
 sentence(Section) --> sentence(Section, user_output).
@@ -150,14 +163,17 @@ myAssert(function(F_NAME), _) :-
   assertz(function(F_NAME)).
 
 myAssert(type(TYPE_PL), noun) :- 
+  log(['asserting type:', TYPE_PL]),
   noun(TYPE_SG, TYPE_PL),
   assertz(type(TYPE_SG)),
   assertz(type(TYPE_PL)).
 
-myAssert(valid_predicate(PRED, Arity), adjective) :-
+myAssert(valid_predicate(PRED, Arity), WordType) :-
+  member(WordType, [adjective, noun]),
   assert_predicate(PRED, Arity).
 
-myAssert(valid_preposition(PRED, PREP), adjective) :-
+myAssert(valid_preposition(PRED, PREP), WordType) :-
+  member(WordType, [adjective, noun]),
   assertz(valid_preposition(PRED, PREP)).
 
 myAssert(valid_predicate(PRED, Arity), verb):-
@@ -176,9 +192,11 @@ assert_predicate(Predicate, Arity) :-
   number(X),
   Arity > X,
   retract(valid_predicate(Predicate, X)),
+  log(['asserting predicate:', Predicate, '/', Arity]),
   assertz(valid_predicate(Predicate, Arity)).
 
 % If nothing of the above, assert the predicate
 assert_predicate(Predicate, Arity) :-
   \+ valid_predicate(Predicate, _),
+  log(['asserting predicate:', Predicate, '/', Arity]),
   assertz(valid_predicate(Predicate, Arity)).

@@ -44,3 +44,15 @@ remove_intersection([X|Tail], L2, Result) :-
   member(X, L2), !, remove_intersection(Tail, L2, Result). 
 remove_intersection([X|Tail], L2, [X|Result]) :-
   remove_intersection(Tail, L2, Result).
+
+% Write something to the user_error stream (log/1)
+% or to another stream (log/2)
+log(Message) :-
+  log(user_error, Message).
+log(Stream, Message) :-
+  is_list(Message),
+  atomics_to_string(Message, ' ', String),
+  writeln(Stream, String).
+log(Stream, Message) :-
+  \+ is_list(Message),
+  writeln(Stream, Message).

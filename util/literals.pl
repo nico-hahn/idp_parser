@@ -26,6 +26,7 @@ lit_different --> [different].
 lit_from --> [from].
 lit_of --> [of].
 determiner --> [the]; [a]; [an]; [another]; [some].
+optional_determiner --> determiner; [].
 quantifier --> [each]; [every]; [all].
 rp --> [that]; [which]; [who].
 

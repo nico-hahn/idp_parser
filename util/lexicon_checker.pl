@@ -11,7 +11,7 @@ verb(SFORM, NORMALFORM) :-
 
 verb(NEW_S, NML) :-
   atom_concat(NML, s, NEW_S),
-  writeln(user_error, ['unknown verb ', NML, ' guessing ', NEW_S]),
+  log(['unknown verb:', NML, ', guessing:', NEW_S]),
   assertz(verb_guess(NEW_S, NML)).
 
 % TODO: Add another rule to guess ..y to ..ies
@@ -24,11 +24,11 @@ noun(S, P) :-
 
 noun(NEW_SG, PL) :-
   atom_concat(NEW_SG, s, PL),
-  writeln(user_error, ['unknown noun ', PL, ' guessing ', NEW_SG]),
+  log(['unknown noun:', PL, ', guessing:', NEW_SG]),
   assertz(noun_guess(PL, NEW_SG)).
 
 noun(_, PL) :-
-  writeln(user_error, ['unknown noun ', PL, ' word too hard to guess']),
+  log(['unknown noun:', PL, ', word too hard to guess']),
   fail.
 
 singularize(Word, WordSing) :-

@@ -13,6 +13,13 @@ vSentence -->
   argList(vSentence, RefList1),
   lit_can,
   lit_be,
+  determiner,
+  predicate(vSentence, noun, RefList1, drs([], []), _).
+
+vSentence -->
+  argList(vSentence, RefList1),
+  lit_can,
+  lit_be,
   predicate(vSentence, adjective, RefList1, drs([], []), _).
 
 vSentence -->

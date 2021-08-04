@@ -10,6 +10,7 @@ readWordsFromList(List, [AtomWord|Words]) :-
   readWordsFromList(Rest, Words).
 
 % End the current word on: space and new line
+readNextWord([], [], []).
 readNextWord([32|Rest], [], Rest).
 readNextWord([10|Rest], [], Rest).
 readNextWord(List, [Char|Word], R) :-

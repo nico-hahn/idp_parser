@@ -11,9 +11,6 @@ test(types) :-
   assertion(noun(tree, trees)),
   assertion(noun(flower, flowers)).
 
-%test(typesFail, [fail]) :-
-%  assertion(sentence([there, are, spoons, spoons, '.'], [])).
-
 test(argList) :-
   assertion(
     optional_det_phrase([a, tree], [])
@@ -57,6 +54,29 @@ test(functionDefinitions) :-
   ),
   assertion(
     sentenceComponent(vocabulary, _, [a, dog, can, have, an, owner, that, is, a, person], [])
+  ).
+
+test(metavocabulary) :-
+  assertion(
+    metaSentence(
+      vocabulary,
+      [
+        vocabulary, ':', there, are, cards, '.',
+        a, card, and, a, card, can, be, hand, '.'
+      ],
+      []
+    )
+  ),
+  assertion(
+    metaSentence(
+      vocabulary,
+      [
+        vocabulary, ':', there, are, insects, '.',
+        an, insect, can, be, a, bee, '.',
+        an, insect, can, be, green, '.'
+      ],
+      []
+    )
   ).
 
 :- end_tests(grammarTests).

@@ -8,6 +8,13 @@
 
 % Load and run tests.
 :- [test].
+% Reset everything after testing.
+:- retractall(type(_)).
+:- retractall(function(_)).
+:- retractall(valid_predicate(_,_)).
+:- retractall(valid_preposition(_,_)).
+:- retractall(noun_guess(_,_)).
+
 
 % Do the work.
 all([])     --> [].
@@ -16,10 +23,12 @@ all([L|Ls]) --> [L], all(Ls).
 parse :-
   phrase_from_stream(all(Ls), user_input),
   readText(Ls, Words),
-  write(Words).
+  log(['list of words:'|Words]),
+  log(''), % empty line
+  parserGrammar(Words, []).
 
-:- writeln(user_error, '*********** Initiating parser ***********').
+:- log('*********** Initiating parser ***********').
 :- parse.
-:- writeln(user_error, '***********  Finished parser  ***********').
+:- log('***********  Finished parser  ***********').
 
 :- halt.
