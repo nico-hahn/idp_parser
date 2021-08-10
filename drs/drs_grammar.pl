@@ -7,42 +7,22 @@
 :- [drs_theory].
 :- [drs_vocabulary].
 
-parserGrammar -->
-  {
-    log('started parsing...')
-  },
-  metaSentence(vocabulary),
-  metaSentence(theory),
-  metaSentence(structure),
-  {
-    log('...finished parsing')
-  }. 
-
 metaSentence(vocabulary) -->
   {
     log('...parsing vocabulary...')
   },
-  lit_vocabulary,
-  lit_colon,
-  sentences(vocabulary),
-  {
-    log('...finished vocabulary...')
-  }.
+  sentences(vocabulary).
 
 metaSentence(theory) -->
   {
     log('...parsing theory...')
   },
-  lit_theory,
-  lit_colon,
   sentences(theory).
 
 metaSentence(structure) -->
   {
     log('...parsing structure...')
   },
-  lit_structure,
-  lit_colon,
   sentences(structure).
 
 sentences(_) --> [].

@@ -61,19 +61,8 @@ test(metavocabulary) :-
     metaSentence(
       vocabulary,
       [
-        vocabulary, ':', there, are, cards, '.',
-        a, card, and, a, card, can, be, hand, '.'
-      ],
-      []
-    )
-  ),
-  assertion(
-    metaSentence(
-      vocabulary,
-      [
-        vocabulary, ':', there, are, insects, '.',
-        an, insect, can, be, a, bee, '.',
-        an, insect, can, be, green, '.'
+        there, are, members, '.', a, member, and, a,
+        member, can, be, friends2, '.', a, member, can, be, tall, '.'
       ],
       []
     )
