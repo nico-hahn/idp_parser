@@ -13,9 +13,8 @@
 :- retractall(function(_)).
 :- retractall(valid_predicate(_,_)).
 :- retractall(valid_preposition(_,_)).
-:- retractall(noun_guess(_,_)).
 
-
+/**
 % Do the work.
 all([])     --> [].
 all([L|Ls]) --> [L], all(Ls).
@@ -23,12 +22,17 @@ all([L|Ls]) --> [L], all(Ls).
 parse :-
   phrase_from_stream(all(Ls), user_input),
   readText(Ls, Words),
-  log(['list of words:'|Words]),
+  splitText(Words, V, T, S),
+  log(['vocabulary:'|V]),
+  log(['theory:'|T]),
+  log(['structure:'|S]),
   log(''), % empty line
-  parserGrammar(Words, []).
+  metaSentence(vocabulary, V, []),
+  metaSentence(theory, T, []),
+  metaSentence(structure, S, []).
 
 :- log('*********** Initiating parser ***********').
 :- parse.
 :- log('***********  Finished parser  ***********').
 
-:- halt.
+:- halt.*/

@@ -1,3 +1,23 @@
+splitText(Words, Vocabulary, Theory, Structure) :-
+  fill(Words, V, vocabulary),
+  reverse(V, Vocabulary),
+  fill(Words, T, theory),
+  reverse(T, Theory),
+  fill(Words, S, structure),
+  reverse(S, Structure).
+
+fill([Splitter, ':'|Words], Section, Splitter) :-
+  fillSection(Words, [], Section).
+fill([_|Words], Section, Splitter) :-
+  fill(Words, Section, Splitter).
+
+fillSection([], Section, Section).
+fillSection([theory|_], Section, Section).
+fillSection([vocabulary|_], Section, Section).
+fillSection([structure|_], Section, Section).
+fillSection([W|Words], SectionWords, Section) :-
+  fillSection(Words, [W|SectionWords], Section).
+
 readText(CharList, Text) :-
   readWordsFromList(CharList, AtomList),
   handleSpecialCharacters(AtomList, Text).
