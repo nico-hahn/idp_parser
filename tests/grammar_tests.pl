@@ -62,7 +62,7 @@ test(metavocabulary) :-
       vocabulary,
       [
         there, are, members, '.', a, member, and, a,
-        member, can, be, friends2, '.', a, member, can, be, tall, '.'
+        member, can, be, friends2, '.', a, member, can, be, tall2, '.'
       ],
       []
     )
