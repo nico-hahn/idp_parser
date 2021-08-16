@@ -33,7 +33,7 @@ test(definitionEmpty) :-
     sentenceComponent(
       theory,
       drs([], [definition]),
-      [we, define, the, following, ':', end, of, definition, '.'],
+      [we, define, the, following, ':', end, of, definition],
       []
     )
   ).
@@ -46,7 +46,7 @@ test(definitionSimple) :-
       [
         we, define, the, following, ':',
         the, tree, t1, is, tall, '.',
-        end, of, definition, '.'
+        end, of, definition
       ],
       []
     )
@@ -62,7 +62,7 @@ test(definitionComplex) :-
         if, a, tree, t1, and, t2, are, friends,
         and, t2, and, t3, are, friends, ',',
         then, t1, and, t3, are, friends, '.',
-        end, of, definition, '.'
+        end, of, definition
       ],
       []
     )

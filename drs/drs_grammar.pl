@@ -35,10 +35,11 @@ sentence(Section, Stream) -->
   lit_period,
   {
     %TODO: Translate the DRS into IDP Code
-    writeln(Stream, DrsOut)
+    writeln(Stream, DrsOut),
+    log([Section, ':', DrsOut])
   }.
 
-sentenceComponent(vocabulary, _) --> vSentence. % Vocabulary sentences don't produce DRS
+sentenceComponent(vocabulary, none) --> vSentence. % Vocabulary sentences don't produce DRS
 
 sentenceComponent(structure, DrsOut) -->
   sSentence(drs([], [], DrsOut)).
