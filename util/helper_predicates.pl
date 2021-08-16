@@ -51,8 +51,17 @@ log(Message) :-
   log(user_error, Message).
 log(Stream, Message) :-
   is_list(Message),
+  is_atom_list(Message),
   atomics_to_string(Message, ' ', String),
-  writeln(Stream, String).
+  writeln(Stream, String),
+  !.
 log(Stream, Message) :-
-  \+ is_list(Message),
   writeln(Stream, Message).
+is_atom_list([]).
+is_atom_list([H|T]) :-
+  atom(H),
+  is_atom_list(T),
+  !.
+is_atom_list([H|T]) :-
+  number(H),
+  is_atom_list(T).

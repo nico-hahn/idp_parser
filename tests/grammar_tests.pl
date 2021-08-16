@@ -62,7 +62,25 @@ test(metavocabulary) :-
       vocabulary,
       [
         there, are, members, '.', a, member, and, a,
-        member, can, be, friends2, '.', a, member, can, be, tall2, '.'
+        member, can, be, friends2, '.', a, member, can, be, tall2, '.',
+        a, member, can, be, a, premium, '.'
+      ],
+      []
+    )
+  ).
+
+test(metatheory) :-
+  assertion(
+    metaSentence(
+      theory,
+      [
+        we, define, the, following, ':',
+        if, a, member, m1, and, a, member, m2, are, friends2,
+        and, m2, and, a, member, m3, are, friends2, ',',
+        then, m1, and, m3, are, friends2, '.',
+        end, of, definition, '.',
+        if, a, member, m1, is, tall2, ',',
+        then, m1, is, not, a, premium, '.'
       ],
       []
     )
