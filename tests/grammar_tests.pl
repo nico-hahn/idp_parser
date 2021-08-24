@@ -59,6 +59,7 @@ test(functionDefinitions) :-
 test(metavocabulary) :-
   assertion(
     metaSentence(
+      user_error,
       vocabulary,
       [
         there, are, members, '.', a, member, and, a,
@@ -72,6 +73,7 @@ test(metavocabulary) :-
 test(metatheory) :-
   assertion(
     metaSentence(
+      user_error,
       theory,
       [
         we, define, the, following, ':',
@@ -81,6 +83,21 @@ test(metatheory) :-
         end, of, definition, '.',
         if, a, member, m1, is, tall2, ',',
         then, m1, is, not, a, premium, '.'
+      ],
+      []
+    )
+  ).
+
+test(metastructure) :-
+  assertion(
+    metaSentence(
+      user_error,
+      structure,
+      [
+        m1, and, m2, and, m3, and, m4, are, members, '.',
+        m1, is, a, premium, '.',
+        m2, is, tall2, '.',
+        m3, and, m4, are, friends2, '.'    
       ],
       []
     )

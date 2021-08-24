@@ -7,26 +7,16 @@
 :- [drs_theory].
 :- [drs_vocabulary].
 
-metaSentence(vocabulary) -->
+metaSentence(Section) -->
+  metaSentence(user_output, Section).
+metaSentence(Stream, Section) -->
   {
-    log('...parsing vocabulary...')
+    log(['...', parsing, Section, '...'])
   },
-  sentences(vocabulary).
+  sentences(Stream, Section).
 
-metaSentence(theory) -->
-  {
-    log('...parsing theory...')
-  },
-  sentences(theory).
-
-metaSentence(structure) -->
-  {
-    log('...parsing structure...')
-  },
-  sentences(structure).
-
-sentences(_) --> [].
-sentences(Section) --> sentence(Section), sentences(Section).
+sentences(_, _) --> [].
+sentences(Stream, Section) --> sentence(Section, Stream), sentences(Stream, Section).
 % a sentence can be: a super-theory-sentence, a vocabulary-sentence, a structure-sentence, or a definition.
 % every sentence ends with a '.'
 sentence(Section) --> sentence(Section, user_output).
@@ -39,10 +29,10 @@ sentence(Section, Stream) -->
     log([Section, ':', DrsOut])
   }.
 
-sentenceComponent(vocabulary, none) --> vSentence. % Vocabulary sentences don't produce DRS
+sentenceComponent(vocabulary, 'Vocabulary output') --> vSentence. % Vocabulary sentences don't produce DRS
 
 sentenceComponent(structure, DrsOut) -->
-  sSentence(drs([], [], DrsOut)).
+  sSentence(drs([], []), DrsOut).
 
 sentenceComponent(theory, DrsOut) -->
   definition(drs([], []), DrsOut);

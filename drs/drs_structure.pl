@@ -59,6 +59,24 @@ sSentenceSuffix(_, DrsIn, ReferentList, DrsOut) -->
 
 % Standard structure sentences ...
 
+sSentenceSuffix(noun, DrsIn, ReferentList, DrsOut) -->
+  sSentenceConnector(noun),
+  [PredicateName],
+  {
+    length(ReferentList, Len),
+    valid_predicate(PredicateName, Len),
+    \+valid_preposition(PredicateName, _),
+    DrsIn = drs(RefsIn, Conditions),
+    append(ReferentList, RefsIn, RefsOut),
+    buildDrsPredicate(PredicateName, ReferentList, NewCondition),
+    DrsOut = drs(RefsOut, [NewCondition|Conditions])
+  }.
+
+sSentenceSuffix(noun, DrsIn, ReferentList, DrsOut) -->
+  sSentenceConnector(noun),
+  [PredicateName],
+  structPrepositionPhrase(PredicateName, sSentence, DrsIn, ReferentList, DrsOut).
+
 sSentenceSuffix(verb, DrsIn, ReferentList, DrsOut) -->
   [PredicateName],
   argList(sSentence, empty, MoreReferents),
@@ -75,7 +93,7 @@ sSentenceSuffix(verb, DrsIn, ReferentList, DrsOut) -->
 
 sSentenceSuffix(verb, DrsIn, ReferentList, DrsOut) -->
   [PredicateName],
-  structPrepositionPhrase(PredicateName, sStentence, DrsIn, ReferentList, DrsOut).
+  structPrepositionPhrase(PredicateName, sSentence, DrsIn, ReferentList, DrsOut).
 
 sSentenceSuffix(adjective, DrsIn, ReferentList, DrsOut) -->
   is_are,

@@ -40,7 +40,7 @@ noun(_, PL) :-
   fail.
 
 singularize(Word, WordSing) :-
-  noun(WordSing, Word).
+  noun(WordSing, Word), !.
 singularize(Word, Word).
   
   
