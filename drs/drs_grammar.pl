@@ -8,28 +8,34 @@
 :- [drs_vocabulary].
 
 metaSentence(Section) -->
-  metaSentence(user_output, Section).
-metaSentence(Stream, Section) -->
+  metaSentence(user_output, Section, DrsOutput).
+
+metaSentence(Stream, Section, DrsOutput) -->
   {
     log(['...', parsing, Section, '...'])
   },
-  sentences(Stream, Section).
+  sentences(Stream, Section, DrsOutput),
+  {
+    drs2idp(Section, DrsOutput, IdpCode),
+    log(['IDP Code for ', Section, ':', IdpCode]),
+    writeln(Stream, IdpCode)
+  }.
 
-sentences(_, _) --> [].
-sentences(Stream, Section) --> sentence(Section, Stream), sentences(Stream, Section).
+sentences(Stream, Section, [Output|Outputs]) --> 
+  sentence(Section, Output),
+  sentences(Stream, Section, Outputs).
+sentences(_, _, []) --> [].
 % a sentence can be: a super-theory-sentence, a vocabulary-sentence, a structure-sentence, or a definition.
 % every sentence ends with a '.'
-sentence(Section) --> sentence(Section, user_output).
-sentence(Section, Stream) -->
+sentence(Section, DrsOut) --> sentence(Section, DrsOut, user_output).
+sentence(Section, DrsOut, Stream) -->
   sentenceComponent(Section, DrsOut),
   lit_period,
   {
-    %TODO: Translate the DRS into IDP Code
-    writeln(Stream, DrsOut),
     log([Section, ':', DrsOut])
   }.
 
-sentenceComponent(vocabulary, 'Vocabulary output') --> vSentence. % Vocabulary sentences don't produce DRS
+sentenceComponent(vocabulary, DrsOut) --> vSentence(DrsOut). % Vocabulary sentences don't produce DRS
 
 sentenceComponent(structure, DrsOut) -->
   sSentence(drs([], []), DrsOut).

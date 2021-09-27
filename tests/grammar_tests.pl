@@ -3,11 +3,11 @@
 % TODO: DRS Threading tests go here once the system is set up.
 
 test(types) :-
-  assertion(sentence(vocabulary, user_error, [there, are, trees, '.'], [])),
-  assertion(sentence(vocabulary, user_error, [there, are, flowers, '.'], [])),
-  assertion(sentence(vocabulary, user_error, [there, are, areas, '.'], [])),
-  assertion(sentence(vocabulary, user_error, [there, are, dogs, '.'], [])),
-  assertion(sentence(vocabulary, user_error, [there, are, persons, '.'], [])),
+  assertion(sentence(vocabulary, _, user_error, [there, are, trees, '.'], [])),
+  assertion(sentence(vocabulary, _, user_error, [there, are, flowers, '.'], [])),
+  assertion(sentence(vocabulary, _, user_error, [there, are, areas, '.'], [])),
+  assertion(sentence(vocabulary, _, user_error, [there, are, dogs, '.'], [])),
+  assertion(sentence(vocabulary, _, user_error, [there, are, persons, '.'], [])),
   assertion(noun(tree, trees)),
   assertion(noun(flower, flowers)).
 

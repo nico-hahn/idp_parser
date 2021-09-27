@@ -1,51 +1,78 @@
 % type delcarations
-vSentence -->
+vSentence(DrsOut) -->
   lit_there,
   lit_are,
-  [TYPE_NAME],
+  [Type],
   {
-    verify_not_reserved(TYPE_NAME),
-    myAssert(type(TYPE_NAME), noun)
+    verify_not_reserved(Type),
+    myAssert(type(Type), noun),
+    singularize(Type, TypeSingular),
+    DrsOut = drs([typeDeclaration], [type(TypeSingular)])
   }.
 
 % predicate declarations
-vSentence -->
+vSentence(DrsOut) -->
   argList(vSentence, RefList1),
   lit_can,
   lit_be,
   determiner,
-  predicate(vSentence, noun, RefList1, drs([], []), _).
+  predicate(vSentence, noun, RefList1, drs([], []), Drs),
+  {
+    Drs = drs(_, Conditions),
+    DrsOut = drs([predicateDeclaration], Conditions)
+  }.
 
-vSentence -->
+vSentence(DrsOut) -->
   argList(vSentence, RefList1),
   lit_can,
   lit_be,
-  predicate(vSentence, adjective, RefList1, drs([], []), _).
+  predicate(vSentence, adjective, RefList1, drs([], []), Drs),
+  {
+    Drs = drs(_, Conditions),
+    DrsOut = drs([predicateDeclaration], Conditions)
+  }.
 
-vSentence -->
+vSentence(DrsOut) -->
   argList(vSentence, RefList1),
   lit_can,
-  predicate(vSentence, verb, RefList1, drs([], []), _).
+  predicate(vSentence, verb, RefList1, drs([], []), Drs),
+  {
+    Drs = drs(_, Conditions),
+    DrsOut = drs([predicateDeclaration], Conditions)
+  }.
 
 % function declaration
-vSentence -->
-  argList(vSentence, _),
+vSentence(DrsOut) -->
+  argList(vSentence, Args),
   lit_can,
   lit_have,
   determiner,
-  [FUNCTION_NAME],
-  functionTypePhrase,
+  [FunctionName],
+  functionTypePhrase(Type),
   {
-    verify_not_reserved(FUNCTION_NAME),
-    myAssert(function(FUNCTION_NAME), _)
+    verify_not_reserved(FunctionName),
+    myAssert(function(FunctionName), _),
+    DrsOut = drs([functionDeclaration], [function(FunctionName, Args, Type)])
   }.
 
-functionTypePhrase --> [].
-functionTypePhrase -->
+vSentence(DrsOut) -->
+  argList(vSentence, Args),
+  lit_can,
+  lit_have,
+  determiner,
+  [FunctionName],
+  {
+    Args = [Type|_],
+    verify_not_reserved(FunctionName),
+    myAssert(function(FunctionName), _),
+    DrsOut = drs([functionDeclaration], [function(FunctionName, Args, Type)])
+  }.
+
+functionTypePhrase(Type) -->
   rp,
   lit_is,
   determiner,
-  [TYPE_NAME],
+  [Type],
   {
-    type(TYPE_NAME)
+    type(Type)
   }.

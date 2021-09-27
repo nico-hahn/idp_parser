@@ -3,6 +3,7 @@
 % Load up system.
 :- use_module(library(pure_input)).
 :- [util/helper_predicates].
+:- [util/drs2idp].
 :- [drs/drs_grammar].
 :- [util/file_reader].
 

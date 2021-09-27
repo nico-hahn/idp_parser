@@ -65,3 +65,9 @@ is_atom_list([H|T]) :-
 is_atom_list([H|T]) :-
   number(H),
   is_atom_list(T).
+
+% Takes a list of strings and concatenates all of them.
+super_concat([], '').
+super_concat([String|Strings], Output) :-
+  super_concat(Strings, Outs),
+  string_concat(String, Outs, Output).
