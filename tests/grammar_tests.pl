@@ -61,6 +61,7 @@ test(metavocabulary) :-
     metaSentence(
       user_error,
       vocabulary,
+      _,
       [
         there, are, members, '.', a, member, and, a,
         member, can, be, friends2, '.', a, member, can, be, tall2, '.',
@@ -75,6 +76,7 @@ test(metatheory) :-
     metaSentence(
       user_error,
       theory,
+      _,
       [
         we, define, the, following, ':',
         if, a, member, m1, and, a, member, m2, are, friends2,
@@ -93,6 +95,7 @@ test(metastructure) :-
     metaSentence(
       user_error,
       structure,
+      _,
       [
         m1, and, m2, and, m3, and, m4, are, members, '.',
         m1, is, a, premium, '.',
