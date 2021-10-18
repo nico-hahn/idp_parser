@@ -92,7 +92,7 @@ test(functionStructure) :-
   assertion(
     sSentence(
       drs([], []),
-      drs([barker], [value(owner(barker), peter)]),
+      drs([barker], [f_value(owner(barker), peter)]),
       [the, owner, of, the, dog, barker, is, peter],
       []
     )

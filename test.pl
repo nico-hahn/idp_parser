@@ -4,6 +4,8 @@
 :- consult('./tests/helper_tests').
 :- consult('./tests/grammar_tests').
 :- consult('./tests/drs_tests').
+:- consult('./tests/drs_tests').
+:- consult('./tests/drs2idp_tests').
 
 :- run_tests.
 

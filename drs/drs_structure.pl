@@ -158,7 +158,7 @@ sSentence(DrsIn, DrsOut) -->
     DrsIn = drs(RefsIn, CondsIn),
     append(Referents, RefsIn, RefsOut),
     buildDrsPredicate(FunctionName, Referents, Function),
-    DrsOut = drs(RefsOut, [value(Function, FunctionVal)|CondsIn])
+    DrsOut = drs(RefsOut, [f_value(Function, FunctionVal)|CondsIn])
   }.
 
 %TODO: Refactor repeating extra arguments.
