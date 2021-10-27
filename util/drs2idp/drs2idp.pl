@@ -1,11 +1,15 @@
 :- [func2idp].
+:- [theory2idp].
 
 drs2idp(vocabulary, Drs, IdpOut) :-
   reverse(Drs, DrsRev),
   buildIdp(vocabulary, DrsRev, Idp),
   super_concat(['vocabulary v1 {\n', Idp, '}'], IdpOut).
 
-drs2idp(theory, Drs, IdpOut).
+drs2idp(theory, Drs, IdpOut) :-
+  reverse(Drs, DrsRev),
+  buildIdp(theory, DrsRev, Idp),
+  super_concat(['theory t1 {\n', Idp, '}'], IdpOut).
 
 drs2idp(structure, Drs, IdpOut) :- 
   reverse(Drs, DrsRev),
@@ -17,6 +21,11 @@ buildIdp(_, [], '').
 buildIdp(vocabulary, [Drs|Rest], IdpNew) :-
   buildIdp(vocabulary, Rest, Idp),
   buildStringfromDrs(vocabulary, Drs, String),
+  string_concat(Idp, String, IdpNew).
+
+buildIdp(theory, [Drs|Rest], IdpNew) :-
+  buildIdp(theory, Rest, Idp),
+  drs2fol(Drs, String),
   string_concat(Idp, String, IdpNew).
 
 buildIdp(structure, DrsList, IdpNew) :-
