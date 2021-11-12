@@ -30,7 +30,8 @@ parse :-
   log(''), % empty line
   metaSentence(vocabulary, V, []),
   metaSentence(theory, T, []),
-  metaSentence(structure, S, []).
+  metaSentence(structure, S, []),
+  metaSentence(procedure, _, []).
 
 :- log('*********** Initiating parser ***********').
 :- parse.

@@ -9,12 +9,20 @@ drs2idp(vocabulary, Drs, IdpOut) :-
 drs2idp(theory, Drs, IdpOut) :-
   reverse(Drs, DrsRev),
   buildIdp(theory, DrsRev, Idp),
-  super_concat(['theory t1 {\n', Idp, '}'], IdpOut).
+  super_concat(['theory t1: v1 {\n', Idp, '}'], IdpOut).
 
 drs2idp(structure, Drs, IdpOut) :- 
   reverse(Drs, DrsRev),
   buildIdp(structure, DrsRev, Idp),
-  super_concat(['structure s1 {\n', Idp, '}'], IdpOut).
+  super_concat(['structure s1: v1 {\n', Idp, '}'], IdpOut).
+
+drs2idp(procedure, _, IdpOut) :-
+  super_concat([
+    'procedure main(){\n',
+    '\tmodels = modelexpand(t1, s1)\n',
+    '\tprint(models)\n',
+    '}'
+  ], IdpOut).
 
 buildIdp(_, [], '').
 

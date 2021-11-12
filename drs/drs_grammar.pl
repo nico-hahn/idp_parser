@@ -25,6 +25,7 @@ sentences(Stream, Section, [Output|Outputs]) -->
   sentence(Section, Output),
   sentences(Stream, Section, Outputs).
 sentences(_, _, []) --> [].
+sentences(_, procedure, _) --> [].
 % a sentence can be: a super-theory-sentence, a vocabulary-sentence, a structure-sentence, or a definition.
 % every sentence ends with a '.'
 sentence(Section, DrsOut) --> sentence(Section, DrsOut, user_output).

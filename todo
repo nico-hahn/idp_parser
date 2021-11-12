@@ -1,0 +1,14 @@
+## TODO
+* Existenzquantor rechte box; einzelne box.
+-> parsing fehler; + in der Eingabe ermöglichen
+* "a tall bush t1"
+* likes bug
+* procedure
+* equal/not equal drs übersetzung
+* preposition bug
+
+## Future work
+* verschiedene procedures
+* Nebensätze (tree t1, that is tall and green and a bush, ...)
+* some parent t1 of some child t1
+* Feedback vom System bzgl ambiger Eingabesätze.
