@@ -37,6 +37,20 @@ translateConditions([Condition|Rest], String) :-
   super_concat(['~( ', NegFol, ' ) & ', StrRest], String).
 
 translateConditions([Condition|Rest], String) :-
+  Condition = notEqual(X, Y),
+  translateConditions(Rest, StrRest),
+  term_string(X, XStr),
+  term_string(Y, YStr),
+  super_concat(['(', XStr, ' ~= ', YStr, ') & ', StrRest], String).
+
+translateConditions([Condition|Rest], String) :-
+  Condition = equal(X, Y),
+  translateConditions(Rest, StrRest),
+  term_string(X, XStr),
+  term_string(Y, YStr),
+  super_concat(['(', XStr, ' = ', YStr, ') & ', StrRest], String).
+
+translateConditions([Condition|Rest], String) :-
   translateConditions(Rest, StrRest),
   term_string(Condition, CondStr),
   super_concat([CondStr, ' & ', StrRest], String).
