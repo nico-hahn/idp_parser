@@ -10,11 +10,6 @@ tSentence(DrsIn, DrsOutNeg) -->
     DrsOutNeg = drs(RefsOut, [drsNeg(drs([], [CondNeg]))|CondsOutRest])
   }.
 
-tSentence(DrsIn, DrsOut) -->
-  argList(tSentence, RefList1),
-  is_are,
-  predicate(tSentence, _, RefList1, DrsIn, DrsOut).
-
 tSentence(DrsIn, DrsOutNeg) -->
   argList(tSentence, RefList1),
   neg(verb),
@@ -23,6 +18,12 @@ tSentence(DrsIn, DrsOutNeg) -->
     DrsOut = drs(RefsOut, [CondNeg|CondsOutRest]),
     DrsOutNeg = drs(RefsOut, [drsNeg(drs([], [CondNeg]))|CondsOutRest])
   }.
+
+% verb, adjective
+tSentence(DrsIn, DrsOut) -->
+  argList(tSentence, RefList1),
+  is_are_optional,
+  predicate(tSentence, _, RefList1, DrsIn, DrsOut).
 
 tSentence(DrsIn, DrsOutNeg) -->
   argList(tSentence, RefList1),
@@ -34,6 +35,13 @@ tSentence(DrsIn, DrsOutNeg) -->
     DrsOut = drs(RefsOut, [CondNeg|CondsOutRest]),
     DrsOutNeg = drs(RefsOut, [drsNeg(drs([], [CondNeg]))|CondsOutRest])
   }.
+
+% noun
+tSentence(DrsIn, DrsOut) -->
+  argList(tSentence, RefList1),
+  is_are,
+  determiner_optional,
+  predicate(tSentence, noun, RefList1, DrsIn, DrsOut).
 
 neg(verb) --> lit_does, lit_not.
 neg(verb) --> lit_do, lit_not.

@@ -30,6 +30,7 @@ optional_determiner --> determiner; [].
 quantifier --> [each]; [every]; [all].
 rp --> [that]; [which]; [who].
 
+determiner_optional --> determiner; [].
 is_are_optional --> lit_is; lit_are; [].
 is_are --> lit_is; lit_are.
 quant_det --> quantifier ; determiner.
