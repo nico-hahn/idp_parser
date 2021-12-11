@@ -84,18 +84,23 @@ predicate(SentenceType, WordType, RefList1, DrsIn, DrsOut) -->
     verify_not_reserved(Predicate),
     append(RefList1, RefList2, Referents),
     length(Referents, Arity),
-    validate_predicate(SentenceType, Predicate, Arity, WordType),
-    buildDrsPredicate(Predicate, Referents, Condition),
+    validate_predicate(SentenceType, Predicate, Arity, WordType, ValidPredicate),
+    buildDrsPredicate(ValidPredicate, Referents, Condition),
     remove_intersection(Referents, RefsIn, RefsNew),
     append(RefsNew, RefsIn, RefsOut),
     DrsOut = drs(RefsOut, [Condition|CondsIn])
   }.
 
-validate_predicate(vSentence, P, Arity, WordType) :-
+validate_predicate(vSentence, P, Arity, WordType, P) :-
   myAssert(valid_predicate(P, Arity), WordType), 
   verify_not_reserved(P).
 
-validate_predicate(tSentence, P, Arity, _) :-
+validate_predicate(tSentence, P, Arity, verb, ValidP) :-
+  valid_predicate(P, Arity),
+  verify_not_reserved(P),
+  s_form_pair(ValidP, P).
+
+validate_predicate(tSentence, P, Arity, _, P) :-
   valid_predicate(P, Arity),
   verify_not_reserved(P).
 
@@ -146,7 +151,8 @@ functionPhrase(Referents, Function) -->
   argList(tSentence, Referents),
   {
     verify_not_reserved(FunctionName),
-    buildDrsPredicate(FunctionName, Referents, Function)
+    atom_concat(f_, FunctionName, FunctionNamePrefixed),
+    buildDrsPredicate(FunctionNamePrefixed, Referents, Function)
   }.
 
 functionOperatorPhrase(equal) --> lit_is.

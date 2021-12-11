@@ -136,6 +136,7 @@ sentenceLoop(DrsOuts) -->
 :- dynamic function/1.
 :- dynamic valid_predicate/2.
 :- dynamic valid_preposition/2.
+:- dynamic s_form_pair/2.
 
 myAssert(function(F_NAME), _) :-
   assertz(function(F_NAME)).
@@ -157,7 +158,8 @@ myAssert(valid_preposition(PRED, PREP), WordType) :-
 myAssert(valid_predicate(PRED, Arity), verb):-
   verb(PRED_SFORM, PRED),
   assert_predicate(PRED_SFORM, Arity),
-  assert_predicate(PRED, Arity).
+  assert_predicate(PRED, Arity),
+  assert_pair(PRED, PRED_SFORM).
 
 myAssert(valid_preposition(PRED, PREP), verb) :-
   verb(PRED_SFORM, PRED),
@@ -178,3 +180,9 @@ assert_predicate(Predicate, Arity) :-
   \+ valid_predicate(Predicate, _),
   log(['asserting predicate:', Predicate, '/', Arity]),
   assertz(valid_predicate(Predicate, Arity)).
+
+assert_pair(Form, SForm) :-
+  \+ s_form_pair(Form, SForm),
+  assertz(s_form_pair(Form, SForm)).
+assert_pair(Form, SForm) :-
+  s_form_pair(Form, SForm).
