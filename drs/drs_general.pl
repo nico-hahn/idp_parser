@@ -1,41 +1,49 @@
 :- use_module(library(lists)).
 
-argList(_, []) --> [].
+argList(SentenceType, Refs) -->
+  argList(SentenceType, Refs, _).
 
-argList(sSentence, [Identifier|Refs]) --> 
+argList(_, [], []) --> [].
+
+argList(sSentence, [Identifier|Refs], _) --> 
   [Identifier],
-  moreArgs(sSentence, Refs), 
+  moreArgs(sSentence, Refs, _), 
   {
     verify_not_reserved(Identifier)
     % TODO: Make sure that all members of RefsOut and Identifier are distinct.
   }.
 
-argList(vSentence, [TypeName|Refs]) -->
+argList(vSentence, [TypeName|Refs], _) -->
   determiner,
   [TypeName],
-  moreArgs(vSentence, Refs),
+  moreArgs(vSentence, Refs, _),
   {
     type(TypeName)
   }.
 
-argList(tSentence, [Identifier|Refs]) -->
-  optional_det_phrase,
-  arglist_predicates(Identifier, Conditions),
+argList(tSentence, [Identifier|Refs], ConditionsOut) -->
+  determiner_optional,
+  arglist_predicates(Identifier, NewConditions),
+  optional_type,
   [Identifier],
-  moreArgs(tSentence, Refs),
+  moreArgs(tSentence, Refs, Conditions),
   {
-    verify_not_reserved(Identifier)
+    verify_not_reserved(Identifier),
+    append(NewConditions, Conditions, ConditionsOut)
     % TODO: Make sure that all members of RefsOut and Identifier are distinct.
   }.
 
-moreArgs(_, []) --> [].
-moreArgs(SentenceType, Refs) -->
+moreArgs(_, [], []) --> [].
+moreArgs(SentenceType, Refs, Conditions) -->
   cc,
-  argList(SentenceType, Refs).
+  argList(SentenceType, Refs, Conditions).
 
 optional_det_phrase --> [].
 optional_det_phrase -->
-  determiner,
+  determiner_optional,
+  optional_type.
+optional_type --> [].
+optional_type -->
   [TypeName],
   {
     type(TypeName)
