@@ -1,48 +1,37 @@
 :- use_module(library(lists)).
 
-% generic argList rules
+argList(_, []) --> [].
 
-argList(SentenceType, RefsOut) -->
-  argList(SentenceType, notempty, RefsOut).
-
-argList(SentenceType, EmptyAllowed, RefsOut) -->
-  argList(SentenceType, EmptyAllowed, [], RefsOut).
-
-argList(_, empty, _, []) --> [].
-
-argList(sSentence, _, RefsIn, RefsOut) --> 
+argList(sSentence, [Identifier|Refs]) --> 
   [Identifier],
-  moreArgs(sSentence, [Identifier|RefsIn], RefsOut), 
+  moreArgs(sSentence, Refs), 
   {
     verify_not_reserved(Identifier)
     % TODO: Make sure that all members of RefsOut and Identifier are distinct.
   }.
 
-argList(vSentence, _, RefsIn, RefsOut) -->
+argList(vSentence, [TypeName|Refs]) -->
   determiner,
   [TypeName],
-  moreArgs(vSentence, [TypeName|RefsIn], RefsOut),
+  moreArgs(vSentence, Refs),
   {
     type(TypeName)
   }.
 
-argList(tSentence, _, RefsIn, RefsOut) -->
+argList(tSentence, [Identifier|Refs]) -->
   optional_det_phrase,
+  arglist_predicates(Identifier, Conditions),
   [Identifier],
-  moreArgs(tSentence, [Identifier|RefsIn], RefsOut),
+  moreArgs(tSentence, Refs),
   {
     verify_not_reserved(Identifier)
     % TODO: Make sure that all members of RefsOut and Identifier are distinct.
   }.
 
-moreArgs(_, RefsIn, RefsOut) -->
-  [],
-  {
-    reverse(RefsIn, RefsOut)
-  }.
-moreArgs(X, RefsIn, RefsOut) -->
+moreArgs(_, []) --> [].
+moreArgs(SentenceType, Refs) -->
   cc,
-  argList(X, notempty, RefsIn, RefsOut).
+  argList(SentenceType, Refs).
 
 optional_det_phrase --> [].
 optional_det_phrase -->
@@ -50,4 +39,14 @@ optional_det_phrase -->
   [TypeName],
   {
     type(TypeName)
+  }.
+
+arglist_predicates(_, []) --> [].
+arglist_predicates(Identifier, [Condition|Conditions]) -->
+  [Predicate],
+  arglist_predicates(Identifier, Conditions),
+  {
+    valid_predicate(Predicate, 1),
+    verify_not_reserved(Predicate),
+    buildDrsPredicate(Predicate, [Identifier], Condition)
   }.

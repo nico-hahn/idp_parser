@@ -54,7 +54,7 @@ theoryComponent(DrsIn, DrsOut) -->
 quantified_implication(DrsIn, DrsImp) -->
   lit_for,
   quantifier,
-  argList(sSentence, notempty, ReferentList),
+  argList(sSentence, ReferentList),
   lit_comma,
   implication(DrsNext, DrsImp),
   {

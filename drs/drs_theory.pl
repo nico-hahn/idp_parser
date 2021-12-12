@@ -78,7 +78,7 @@ superTSentence(DrsIn, DrsOut) -->
 predicate(SentenceType, WordType, RefList1, DrsIn, DrsOut) -->
   [Predicate],
   prepositional_phrase(Predicate, SentenceType, WordType),
-  argList(SentenceType, empty, RefList2),
+  argList(SentenceType, RefList2),
   {
     DrsIn = drs(RefsIn, CondsIn),
     verify_not_reserved(Predicate),

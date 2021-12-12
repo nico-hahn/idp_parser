@@ -8,7 +8,7 @@
 :- [util/file_reader].
 
 % Load and run tests.
-:- [test].
+%:- [test].
 % Reset everything after testing.
 :- retractall(type(_)).
 :- retractall(function(_)).

@@ -82,7 +82,7 @@ sSentenceSuffix(verb, DrsIn, ReferentList, DrsOut) -->
   {
     remove_s_form(PredicateName, PredicateNameValid)
   },
-  argList(sSentence, empty, MoreReferents),
+  argList(sSentence, MoreReferents),
   {
     append(ReferentList, MoreReferents, Referents),
     length(Referents, Len),
