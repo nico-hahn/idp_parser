@@ -1,47 +1,66 @@
 % TODO: Put common extra goals into a predicate
 
 tSentence(DrsIn, DrsOutNeg) -->
-  argList(tSentence, RefList1),
+  argList(tSentence, RefList1, Conditions),
   is_are,
   neg(adjective),
-  predicate(tSentence, _, RefList1, DrsIn, DrsOut),
+  predicate(tSentence, _, RefList1, DrsNext, DrsOut),
   {
+    DrsIn = drs(RefsIn, CondsIn),
+    append(Conditions, CondsIn, CondsNext),
+    DrsNext = drs(RefsIn, CondsNext),
     DrsOut = drs(RefsOut, [CondNeg|CondsOutRest]),
     DrsOutNeg = drs(RefsOut, [drsNeg(drs([], [CondNeg]))|CondsOutRest])
   }.
 
 tSentence(DrsIn, DrsOutNeg) -->
-  argList(tSentence, RefList1),
+  argList(tSentence, RefList1, Conditions),
   neg(verb),
-  predicate(tSentence, _, RefList1, DrsIn, DrsOut),
+  predicate(tSentence, _, RefList1, DrsNext, DrsOut),
   {
+    DrsIn = drs(RefsIn, CondsIn),
+    append(Conditions, CondsIn, CondsNext),
+    DrsNext = drs(RefsIn, CondsNext),
     DrsOut = drs(RefsOut, [CondNeg|CondsOutRest]),
     DrsOutNeg = drs(RefsOut, [drsNeg(drs([], [CondNeg]))|CondsOutRest])
   }.
 
 % verb, adjective
 tSentence(DrsIn, DrsOut) -->
-  argList(tSentence, RefList1),
+  argList(tSentence, RefList1, Conditions),
   is_are_optional,
-  predicate(tSentence, _, RefList1, DrsIn, DrsOut).
+  predicate(tSentence, _, RefList1, DrsNext, DrsOut),
+  {
+    DrsIn = drs(RefsIn, CondsIn),
+    append(Conditions, CondsIn, CondsNext),
+    DrsNext = drs(RefsIn, CondsNext),
+  }.
 
 tSentence(DrsIn, DrsOutNeg) -->
-  argList(tSentence, RefList1),
+  argList(tSentence, RefList1, Conditions),
   is_are,
   neg(noun),
   determiner,
-  predicate(tSentence, _, RefList1, DrsIn, DrsOut),
+  predicate(tSentence, _, RefList1, DrsNext, DrsOut),
   {
+    DrsIn = drs(RefsIn, CondsIn),
+    append(Conditions, CondsIn, CondsNext),
+    DrsNext = drs(RefsIn, CondsNext),
     DrsOut = drs(RefsOut, [CondNeg|CondsOutRest]),
     DrsOutNeg = drs(RefsOut, [drsNeg(drs([], [CondNeg]))|CondsOutRest])
   }.
 
 % noun
 tSentence(DrsIn, DrsOut) -->
-  argList(tSentence, RefList1),
+  argList(tSentence, RefList1, Conditions),
   is_are,
   determiner_optional,
-  predicate(tSentence, noun, RefList1, DrsIn, DrsOut).
+  predicate(tSentence, noun, RefList1, DrsNext, DrsOut),
+  {
+    DrsIn = drs(RefsIn, CondsIn),
+    append(Conditions, CondsIn, CondsNext),
+    DrsNext = drs(RefsIn, CondsNext)
+  }.
 
 neg(verb) --> lit_does, lit_not.
 neg(verb) --> lit_do, lit_not.
@@ -52,13 +71,14 @@ superTSentence(DrsIn, DrsOut) -->
 
 superTSentence(DrsIn, DrsOut) -->
   lit_for,
-  argList(tSentence, ReferentList),
+  argList(tSentence, ReferentList, Conditions),
   lit_comma,
   tSentence(DrsNext, DrsOut),
   {
     DrsIn = drs(RefsIn, CondsIn),
     append(ReferentList, RefsIn, RefsNext),
-    DrsNext = drs(RefsNext, CondsIn)
+    append(Conditions, CondsIn, CondsNext),
+    DrsNext = drs(RefsNext, CondsNext)
   }.
 
 superTSentence(DrsIn, DrsOut) -->
@@ -78,9 +98,10 @@ superTSentence(DrsIn, DrsOut) -->
 predicate(SentenceType, WordType, RefList1, DrsIn, DrsOut) -->
   [Predicate],
   prepositional_phrase(Predicate, SentenceType, WordType),
-  argList(SentenceType, RefList2),
+  argList(SentenceType, RefList2, ArgConditions),
   {
-    DrsIn = drs(RefsIn, CondsIn),
+    DrsIn = drs(RefsIn, DrsInConds),
+    append(ArgConditions, DrsInConds, CondsIn),
     verify_not_reserved(Predicate),
     append(RefList1, RefList2, Referents),
     length(Referents, Arity),
