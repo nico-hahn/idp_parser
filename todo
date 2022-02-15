@@ -12,3 +12,9 @@
 * Nebensätze (tree t1, that is tall and green and a bush, ...)
 * some parent t1 of some child t1
 * Feedback vom System bzgl ambiger Eingabesätze.
+
+* vollständige ct-mengen in structure angeben (keine partial structures)
+* cf Mengen in structure eingeben
+--> allgemein ct, cf support
+* if a tree and a tree like each other, they ...
+* proper noun recognition
