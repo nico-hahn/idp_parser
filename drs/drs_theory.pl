@@ -54,11 +54,14 @@ superTSentence(DrsIn, DrsOut) -->
   lit_for,
   argList(tSentence, ReferentList),
   lit_comma,
-  tSentence(DrsNext, DrsOut),
+  tSentence(drs([],[]), DrsRight),
   {
-    DrsIn = drs(RefsIn, CondsIn),
-    append(ReferentList, RefsIn, RefsNext),
-    DrsNext = drs(RefsNext, CondsIn)
+    buildDrsImplication(
+      DrsIn,
+      drs(ReferentList, []),
+      DrsRight,
+      DrsOut
+    )
   }.
 
 superTSentence(DrsIn, DrsOut) -->
@@ -86,6 +89,8 @@ predicate(SentenceType, WordType, RefList1, DrsIn, DrsOut) -->
     length(Referents, Arity),
     validate_predicate(SentenceType, Predicate, Arity, WordType, ValidPredicate),
     buildDrsPredicate(ValidPredicate, Referents, Condition),
+    % this ensures that only new discourese referents are added.
+    % this is required in some complex theory sentences.
     remove_intersection(Referents, RefsIn, RefsNew),
     append(RefsNew, RefsIn, RefsOut),
     DrsOut = drs(RefsOut, [Condition|CondsIn])
