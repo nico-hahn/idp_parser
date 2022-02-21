@@ -38,19 +38,24 @@ buildIdp(theory, [Drs|Rest], IdpNew) :-
 
 buildIdp(structure, DrsList, IdpNew) :-
   concatConditions(DrsList, Conditions),
+  getTypes(DrsList, Types),
   getFunctionValues(Conditions, Values),
   getStructureElements(Conditions, StructureElements),
+  getStructureElements(Types, TypeElements),
   log(Values),
   log(StructureElements),
-  buildStructure(StructureElements, Str1),
+  log(TypeElements),
+  buildStructure(type, TypeElements, Str0),
+  buildStructure(noType, StructureElements, Str1),
   buildFunctionStruct(Values, Str2),
-  string_concat(Str1, Str2, IdpNew).
+  string_concat(Str0, Str1, Str01),
+  string_concat(Str01, Str2, IdpNew).
   % StructureElements = [type([type(a), type(b)]), predicate([predicate(a,b), ...])]
 
-buildStructure([], '').
-buildStructure([Element|Rest], OutString) :-
-  buildStructure(Rest, Idp),
-  createElementString(Element, String),
+buildStructure(IsType, [], '').
+buildStructure(IsType, [Element|Rest], OutString) :-
+  buildStructure(IsType, Rest, Idp),
+  createElementString(IsType, Element, String),
   string_concat(Idp, String, OutString).
 
 buildFunctionStruct([], '').
@@ -77,8 +82,21 @@ buildStringfromDrs(vocabulary, drs([predicateDeclaration], [Predicate]), String)
 % and puts them into a single list
 concatConditions([], []).
 concatConditions([Drs|Rest], ConditionsOut) :-
+  concatConditions(Rest, ConditionsOut),
+  Drs = drs(typeInstance, _).
+concatConditions([Drs|Rest], ConditionsOut) :-
   concatConditions(Rest, Conditions),
   Drs = drs(_, ConditionsCurrent),
+  append(ConditionsCurrent, Conditions, ConditionsOut).
+
+getTypes([], []).
+getTypes([Drs|Rest], ConditionsOut) :-
+  getTypes(Rest, ConditionsOut),
+  Drs = drs(A, _),
+  A \= typeInstance.
+getTypes([Drs|Rest], ConditionsOut) :-
+  getTypes(Rest, Conditions),
+  Drs = drs(typeInstance, ConditionsCurrent),
   append(ConditionsCurrent, Conditions, ConditionsOut).
 
 % Takes a list of conditions, sorts it by predicate name
@@ -105,7 +123,13 @@ obtainAllRemaining(Element, [Condition|Conditions], Found, [Condition|Rest]) :-
   obtainAllRemaining(Element, Conditions, Found, Rest).
 
 % Element = predicate([predicate(a, b), predicate(a,c)])
-createElementString(Element, String) :-
+createElementString(noType, Element, String) :-
+  Element =.. [PredicateName, PredicateList],
+  buildPredicateMembers(PredicateList, MemString),
+  string_concat(MemberString, '; ', MemString),
+  super_concat(['\t', PredicateName, '<ct> = { ', MemberString, ' }\n'], String).
+
+createElementString(type, Element, String) :-
   Element =.. [PredicateName, PredicateList],
   buildPredicateMembers(PredicateList, MemString),
   string_concat(MemberString, '; ', MemString),

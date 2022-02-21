@@ -15,12 +15,11 @@ sSentenceSuffix(noun, DrsIn, ReferentList, DrsOut) -->
   [TypeName],
   {
     type(TypeName),
-    DrsIn = drs(Referents, Conditions),
-    append(ReferentList, Referents, RefsOut),
+    DrsIn = drs(_, Conditions),
     singularize(TypeName, Singular),
     encapsuleListInFunctor(ReferentList, Singular, NewConditions),
     append(NewConditions, Conditions, CondsOut),
-    DrsOut = drs(RefsOut, CondsOut)
+    DrsOut = drs(typeInstance, CondsOut)
   }.
 sSentenceConnector(noun) --> lit_is, determiner.
 sSentenceConnector(noun) --> lit_are.

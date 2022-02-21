@@ -57,11 +57,13 @@ superTSentence(DrsIn, DrsOut) -->
   tSentence(drs([],[]), DrsRight),
   {
     buildDrsImplication(
-      DrsIn,
+      drs([], []),
       drs(ReferentList, []),
       DrsRight,
-      DrsOut
-    )
+      DrsImp
+    ),
+    DrsIn = drs(RefsIn, CondsIn),
+    DrsOut = drs(RefsIn, [DrsImp|CondsIn])
   }.
 
 superTSentence(DrsIn, DrsOut) -->

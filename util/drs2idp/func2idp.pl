@@ -34,7 +34,7 @@ createFunctionString(Function, String) :-
   Function =.. [Name, Values],
   createValueString(Values, ValString),
   string_concat(ValueString, '; ', ValString),
-  super_concat(['\tf_', Name, ' = { ', ValueString, ' }\n'], String).
+  super_concat(['\tf_', Name, '<ct> = { ', ValueString, ' }\n'], String).
 
 createValueString([], '').
 createValueString([Value|Values], ValueString) :-
