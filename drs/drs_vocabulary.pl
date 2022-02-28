@@ -76,3 +76,18 @@ functionTypePhrase(Type) -->
   {
     type(Type)
   }.
+
+% translate natural number into type nat.
+functionTypePhrase(nat) -->
+  rp,
+  lit_is,
+  determiner,
+  [natural],
+  [number].
+
+% translate number into type int.
+functionTypePhrase(int) -->
+  rp,
+  lit_is,
+  determiner,
+  [number].
