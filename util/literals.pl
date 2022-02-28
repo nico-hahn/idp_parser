@@ -21,6 +21,7 @@ lit_do --> [do].
 lit_not --> [not].
 lit_the --> [the].
 cc --> [and].
+cc --> lit_comma, [and].
 cc_or --> [or].
 lit_different --> [different].
 lit_from --> [from].
